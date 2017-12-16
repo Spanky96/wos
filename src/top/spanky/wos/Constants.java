@@ -16,4 +16,6 @@ public class Constants {
     public static final String APP_CONTEXT_USER = "APP_CONTEXT_USER";
     public static final String APP_CONTEXT_SESSION = "APP_CONTEXT_SESSION";
     
+    //path
+    public static final String APP_URL_PREFIX = "page";
 }

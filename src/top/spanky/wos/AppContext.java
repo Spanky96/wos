@@ -74,8 +74,13 @@ public class AppContext {
     		this.addObject("USER", user);
     }
     
+    public User getUser() {
+    		return (User)getObject("USER");
+    		
+    }
+    
     public int getUserId() {
-    		User user = (User)getObject("USER");
+    		User user = getUser();
     		return user == null ? -1 : user.getId();
     }
 
