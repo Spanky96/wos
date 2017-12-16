@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.User">
+
+    <resultMap type="User" id="userMap">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="openid" property="openid"/>
+        <result column="is_active" property="isActive"/>
+    </resultMap>
+
+    <select id="getByUsername" parameterType="String" resultMap="userMap">
+        <![CDATA[
+            SELECT * FROM user WHERE username = #{username}
+        ]]>
+    </select>
+
+</mapper>
