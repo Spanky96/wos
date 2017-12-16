@@ -1,0 +1,19 @@
+.main-info {
+    height: 20%;
+    border: 1px solid red;
+}
+
+.middle {
+    height: 10%;
+    border: 1px solid #0000FF;
+}
+
+.main {
+    height: 60%;
+    border: 1px solid #00FF00;
+}
+
+.bottom {
+    height: 10%;
+    border: 1px solid #0F0F0F;
+}
