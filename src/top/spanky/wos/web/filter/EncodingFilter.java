@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class EncodingFilter implements Filter{
 
-    private String urlEncode;
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        urlEncode = "utf-8";
     }
 
     @Override
@@ -24,9 +22,8 @@ public class EncodingFilter implements Filter{
     ServletException {
         HttpServletRequest request =(HttpServletRequest) servletRequest;
         HttpServletResponse response =(HttpServletResponse) servltResponse;
-        request.setCharacterEncoding(urlEncode);
-        response.setContentType("text/html;charset=" + urlEncode);
-        request.setCharacterEncoding(urlEncode);
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
         filterChain.doFilter(request, response);
     }
 
