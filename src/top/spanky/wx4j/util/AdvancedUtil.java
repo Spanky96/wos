@@ -42,8 +42,10 @@ public class AdvancedUtil {
     /**
      * 组装文本客服消息
      *
-     * @param openId 消息发送对象
-     * @param content 文本消息内容
+     * @param openId
+     *            消息发送对象
+     * @param content
+     *            文本消息内容
      * @return
      */
     public static String makeTextCustomMessage(String openId, String content) {
@@ -56,8 +58,10 @@ public class AdvancedUtil {
     /**
      * 组装图片客服消息
      *
-     * @param openId 消息发送对象
-     * @param mediaId 媒体文件id
+     * @param openId
+     *            消息发送对象
+     * @param mediaId
+     *            媒体文件id
      * @return
      */
     public static String makeImageCustomMessage(String openId, String mediaId) {
@@ -68,8 +72,10 @@ public class AdvancedUtil {
     /**
      * 组装语音客服消息
      *
-     * @param openId 消息发送对象
-     * @param mediaId 媒体文件id
+     * @param openId
+     *            消息发送对象
+     * @param mediaId
+     *            媒体文件id
      * @return
      */
     public static String makeVoiceCustomMessage(String openId, String mediaId) {
@@ -80,9 +86,12 @@ public class AdvancedUtil {
     /**
      * 组装视频客服消息
      *
-     * @param openId 消息发送对象
-     * @param mediaId 媒体文件id
-     * @param thumbMediaId 视频消息缩略图的媒体id
+     * @param openId
+     *            消息发送对象
+     * @param mediaId
+     *            媒体文件id
+     * @param thumbMediaId
+     *            视频消息缩略图的媒体id
      * @return
      */
     public static String makeVideoCustomMessage(String openId, String mediaId, String thumbMediaId) {
@@ -93,8 +102,10 @@ public class AdvancedUtil {
     /**
      * 组装音乐客服消息
      *
-     * @param openId 消息发送对象
-     * @param music 音乐对象
+     * @param openId
+     *            消息发送对象
+     * @param music
+     *            音乐对象
      * @return
      */
     public static String makeMusicCustomMessage(String openId, Music music) {
@@ -108,8 +119,10 @@ public class AdvancedUtil {
     /**
      * 组装图文客服消息
      *
-     * @param openId 消息发送对象
-     * @param articleList 图文消息列表
+     * @param openId
+     *            消息发送对象
+     * @param articleList
+     *            图文消息列表
      * @return
      */
     public static String makeNewsCustomMessage(String openId, List<Article> articleList) {
@@ -123,8 +136,10 @@ public class AdvancedUtil {
     /**
      * 发送客服消息
      *
-     * @param accessToken 接口访问凭证
-     * @param jsonMsg json格式的客服消息（包括touser、msgtype和消息内容）
+     * @param accessToken
+     *            接口访问凭证
+     * @param jsonMsg
+     *            json格式的客服消息（包括touser、msgtype和消息内容）
      * @return true | false
      */
     public static boolean sendCustomMessage(String accessToken, String jsonMsg) {
@@ -153,8 +168,10 @@ public class AdvancedUtil {
     /**
      * 获取网页授权凭证
      *
-     * @param appId 公众账号的唯一标识
-     * @param appSecret 公众账号的密钥
+     * @param appId
+     *            公众账号的唯一标识
+     * @param appSecret
+     *            公众账号的密钥
      * @param code
      * @return WeixinAouth2Token
      */
@@ -162,22 +179,22 @@ public class AdvancedUtil {
         WeixinOauth2Token wat = null;
         // 拼接请求地址
         String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-        requestUrl = requestUrl.replace("APPID", 	appId);
-        requestUrl = requestUrl.replace("SECRET", 	appSecret);
-        requestUrl = requestUrl.replace("CODE", 	code);
+        requestUrl = requestUrl.replace("APPID", appId);
+        requestUrl = requestUrl.replace("SECRET", appSecret);
+        requestUrl = requestUrl.replace("CODE", code);
         // 获取网页授权凭证
         JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
         if (null != jsonObject) {
             try {
                 wat = new WeixinOauth2Token();
-                wat.setAccessToken	(jsonObject.getString("access_token"));
-                wat.setExpiresIn	(jsonObject.getInt("expires_in"));
-                wat.setRefreshToken	(jsonObject.getString("refresh_token"));
-                wat.setOpenId		(jsonObject.getString("openid"));
-                wat.setScope		(jsonObject.getString("scope"));
+                wat.setAccessToken(jsonObject.getString("access_token"));
+                wat.setExpiresIn(jsonObject.getInt("expires_in"));
+                wat.setRefreshToken(jsonObject.getString("refresh_token"));
+                wat.setOpenId(jsonObject.getString("openid"));
+                wat.setScope(jsonObject.getString("scope"));
             } catch (Exception e) {
                 wat = null;
-                int errorCode 	= jsonObject.getInt("errcode");
+                int errorCode = jsonObject.getInt("errcode");
                 String errorMsg = jsonObject.getString("errmsg");
                 log.error("获取网页授权凭证失败 errcode:{} errmsg:{}", errorCode, errorMsg);
             }
@@ -188,26 +205,27 @@ public class AdvancedUtil {
     /**
      * 刷新网页授权凭证
      *
-     * @param appId 公众账号的唯一标识
+     * @param appId
+     *            公众账号的唯一标识
      * @param refreshToken
      * @return WeixinAouth2Token
      */
     public static WeixinOauth2Token refreshOauth2AccessToken(String appId, String refreshToken) {
         WeixinOauth2Token wat = null;
         // 拼接请求地址
-        String requestUrl 	= "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
-        requestUrl 			= requestUrl.replace("APPID", appId);
-        requestUrl 			= requestUrl.replace("REFRESH_TOKEN", refreshToken);
+        String requestUrl = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
+        requestUrl = requestUrl.replace("APPID", appId);
+        requestUrl = requestUrl.replace("REFRESH_TOKEN", refreshToken);
         // 刷新网页授权凭证
         JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
         if (null != jsonObject) {
             try {
                 wat = new WeixinOauth2Token();
-                wat.setAccessToken	(jsonObject.getString("access_token"));
-                wat.setExpiresIn	(jsonObject.getInt("expires_in"));
-                wat.setRefreshToken	(jsonObject.getString("refresh_token"));
-                wat.setOpenId		(jsonObject.getString("openid"));
-                wat.setScope		(jsonObject.getString("scope"));
+                wat.setAccessToken(jsonObject.getString("access_token"));
+                wat.setExpiresIn(jsonObject.getInt("expires_in"));
+                wat.setRefreshToken(jsonObject.getString("refresh_token"));
+                wat.setOpenId(jsonObject.getString("openid"));
+                wat.setScope(jsonObject.getString("scope"));
             } catch (Exception e) {
                 wat = null;
                 int errorCode = jsonObject.getInt("errcode");
@@ -220,18 +238,21 @@ public class AdvancedUtil {
 
     /**
      * 通过网页授权获取用户信息
-     * @param accessToken 网页授权接口调用凭证
-     * @param openId 用户标识
+     *
+     * @param accessToken
+     *            网页授权接口调用凭证
+     * @param openId
+     *            用户标识
      * @return SNSUserInfo
      */
-    @SuppressWarnings( { "deprecation", "unchecked" })
+    @SuppressWarnings({ "deprecation", "unchecked" })
     public static SNSUserInfo getSNSUserInfo(String accessToken, String openId) {
         SNSUserInfo snsUserInfo = null;
         // 拼接请求地址
-        String requestUrl 		= "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID";
-        requestUrl 		  		= requestUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+        String requestUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID";
+        requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
         // 通过网页授权获取用户信息
-        JSONObject jsonObject 	= CommonUtil.httpsRequest(requestUrl, "GET", null);
+        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
 
         if (null != jsonObject) {
             try {
@@ -265,9 +286,12 @@ public class AdvancedUtil {
     /**
      * 创建临时带参二维码
      *
-     * @param accessToken 接口访问凭证
-     * @param expireSeconds 二维码有效时间，单位为秒，最大不超过1800
-     * @param sceneId 场景ID
+     * @param accessToken
+     *            接口访问凭证
+     * @param expireSeconds
+     *            二维码有效时间，单位为秒，最大不超过1800
+     * @param sceneId
+     *            场景ID
      * @return WeixinQRCode
      */
     public static WeixinQRCode createTemporaryQRCode(String accessToken, int expireSeconds, int sceneId) {
@@ -278,14 +302,16 @@ public class AdvancedUtil {
         // 需要提交的json数据
         String jsonMsg = "{\"expire_seconds\": %d, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": %d}}}";
         // 创建临时带参二维码
-        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", String.format(jsonMsg, expireSeconds, sceneId));
+        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST",
+                String.format(jsonMsg, expireSeconds, sceneId));
 
         if (null != jsonObject) {
             try {
                 weixinQRCode = new WeixinQRCode();
                 weixinQRCode.setTicket(jsonObject.getString("ticket"));
                 weixinQRCode.setExpireSeconds(jsonObject.getInt("expire_seconds"));
-                log.info("创建临时带参二维码成功 ticket:{} expire_seconds:{}", weixinQRCode.getTicket(), weixinQRCode.getExpireSeconds());
+                log.info("创建临时带参二维码成功 ticket:{} expire_seconds:{}", weixinQRCode.getTicket(),
+                        weixinQRCode.getExpireSeconds());
             } catch (Exception e) {
                 weixinQRCode = null;
                 int errorCode = jsonObject.getInt("errcode");
@@ -299,8 +325,10 @@ public class AdvancedUtil {
     /**
      * 创建永久带参二维码
      *
-     * @param accessToken 接口访问凭证
-     * @param sceneId 场景ID
+     * @param accessToken
+     *            接口访问凭证
+     * @param sceneId
+     *            场景ID
      * @return ticket
      */
     public static String createPermanentQRCode(String accessToken, int sceneId) {
@@ -329,8 +357,10 @@ public class AdvancedUtil {
     /**
      * 根据ticket换取二维码
      *
-     * @param ticket 二维码ticket
-     * @param savePath 保存路径
+     * @param ticket
+     *            二维码ticket
+     * @param savePath
+     *            保存路径
      */
     public static String getQRCode(String ticket, String savePath) {
         String filePath = null;
@@ -372,8 +402,10 @@ public class AdvancedUtil {
     /**
      * 获取用户信息
      *
-     * @param accessToken 接口访问凭证
-     * @param openId 用户标识
+     * @param accessToken
+     *            接口访问凭证
+     * @param openId
+     *            用户标识
      * @return WeixinUserInfo
      */
     public static WeixinUserInfo getUserInfo(String accessToken, String openId) {
@@ -423,11 +455,13 @@ public class AdvancedUtil {
     /**
      * 获取关注者列表
      *
-     * @param accessToken 调用接口凭证
-     * @param nextOpenId 第一个拉取的openId，不填默认从头开始拉取
+     * @param accessToken
+     *            调用接口凭证
+     * @param nextOpenId
+     *            第一个拉取的openId，不填默认从头开始拉取
      * @return WeixinUserList
      */
-    @SuppressWarnings( { "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public static WeixinUserList getUserList(String accessToken, String nextOpenId) {
         WeixinUserList weixinUserList = null;
 
@@ -462,9 +496,10 @@ public class AdvancedUtil {
     /**
      * 查询分组
      *
-     * @param accessToken 调用接口凭证
+     * @param accessToken
+     *            调用接口凭证
      */
-    @SuppressWarnings( { "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public static List<WeixinGroup> getGroups(String accessToken) {
         List<WeixinGroup> weixinGroupList = null;
         // 拼接请求地址
@@ -489,8 +524,10 @@ public class AdvancedUtil {
     /**
      * 创建分组
      *
-     * @param accessToken 接口访问凭证
-     * @param groupName 分组名称
+     * @param accessToken
+     *            接口访问凭证
+     * @param groupName
+     *            分组名称
      * @return
      */
     public static WeixinGroup createGroup(String accessToken, String groupName) {
@@ -521,9 +558,12 @@ public class AdvancedUtil {
     /**
      * 修改分组名
      *
-     * @param accessToken 接口访问凭证
-     * @param groupId 分组id
-     * @param groupName 修改后的分组名
+     * @param accessToken
+     *            接口访问凭证
+     * @param groupId
+     *            分组id
+     * @param groupName
+     *            修改后的分组名
      * @return true | false
      */
     public static boolean updateGroup(String accessToken, int groupId, String groupName) {
@@ -534,7 +574,8 @@ public class AdvancedUtil {
         // 需要提交的json数据
         String jsonData = "{\"group\": {\"id\": %d, \"name\": \"%s\"}}";
         // 修改分组名
-        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", String.format(jsonData, groupId, groupName));
+        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST",
+                String.format(jsonData, groupId, groupName));
 
         if (null != jsonObject) {
             int errorCode = jsonObject.getInt("errcode");
@@ -552,9 +593,12 @@ public class AdvancedUtil {
     /**
      * 移动用户分组
      *
-     * @param accessToken 接口访问凭证
-     * @param openId 用户标识
-     * @param groupId 分组id
+     * @param accessToken
+     *            接口访问凭证
+     * @param openId
+     *            用户标识
+     * @param groupId
+     *            分组id
      * @return true | false
      */
     public static boolean updateMemberGroup(String accessToken, String openId, int groupId) {
@@ -583,9 +627,12 @@ public class AdvancedUtil {
     /**
      * 上传媒体文件
      *
-     * @param accessToken 接口访问凭证
-     * @param type 媒体文件类型（image、voice、video和thumb）
-     * @param mediaFileUrl 媒体文件的url
+     * @param accessToken
+     *            接口访问凭证
+     * @param type
+     *            媒体文件类型（image、voice、video和thumb）
+     * @param mediaFileUrl
+     *            媒体文件的url
      */
     public static WeixinMedia uploadMedia(String accessToken, String type, String mediaFileUrl) {
         WeixinMedia weixinMedia = null;
@@ -617,7 +664,9 @@ public class AdvancedUtil {
             String fileExt = CommonUtil.getFileExt(contentType);
             // 请求体开始
             outputStream.write(("--" + boundary + "\r\n").getBytes());
-            outputStream.write(String.format("Content-Disposition: form-data; name=\"media\"; filename=\"file1%s\"\r\n", fileExt).getBytes());
+            outputStream.write(
+                    String.format("Content-Disposition: form-data; name=\"media\"; filename=\"file1%s\"\r\n", fileExt)
+                    .getBytes());
             outputStream.write(String.format("Content-Type: %s\r\n\r\n", contentType).getBytes());
 
             // 获取媒体文件的输入流（读取文件）
@@ -671,9 +720,12 @@ public class AdvancedUtil {
     /**
      * 下载媒体文件
      *
-     * @param accessToken 接口访问凭证
-     * @param mediaId 媒体文件标识
-     * @param savePath 文件在服务器上的存储路径
+     * @param accessToken
+     *            接口访问凭证
+     * @param mediaId
+     *            媒体文件标识
+     * @param savePath
+     *            文件在服务器上的存储路径
      * @return
      */
     public static String getMedia(String accessToken, String mediaId, String savePath) {
@@ -723,7 +775,8 @@ public class AdvancedUtil {
          * 发送客服消息（文本消息）
          */
         // 组装文本客服消息
-        String jsonTextMsg = makeTextCustomMessage("oEdzejiHCDqafJbz4WNJtWTMbDcE", "点击查看<a href=\"http://blog.csdn.net/lyq8479\">柳峰的博客</a>");
+        String jsonTextMsg = makeTextCustomMessage("oEdzejiHCDqafJbz4WNJtWTMbDcE",
+                "点击查看<a href=\"http://blog.csdn.net/lyq8479\">柳峰的博客</a>");
         // 发送客服消息
         sendCustomMessage(accessToken, jsonTextMsg);
 

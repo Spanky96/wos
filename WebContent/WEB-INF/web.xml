@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>weixin</display-name>
   <welcome-file-list>
-    <welcome-file>static/main.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   <error-page>
     <error-code>404</error-code>
@@ -16,10 +16,11 @@
     <error-code>403</error-code>
     <location>/static/refused.html</location>
   </error-page>
+  <!--  
   <error-page>
     <error-code>500</error-code>
     <location>/static/500.html</location>
-  </error-page>
+  </error-page>-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:applicationContext.xml</param-value>
@@ -27,15 +28,6 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-   <filter>
-    <display-name>DebugFilter</display-name>
-    <filter-name>DebugFilter</filter-name>
-    <filter-class>top.spanky.wos.web.filter.DebugFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>DebugFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
   <filter>
     <filter-name>AppContextFilter</filter-name>
     <filter-class>top.spanky.wos.web.filter.AppContextFilter</filter-class>

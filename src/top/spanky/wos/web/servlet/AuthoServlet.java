@@ -1,13 +1,9 @@
-package top.spanky.wos.web.filter;
+package top.spanky.wos.web.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,21 +12,23 @@ import top.spanky.wx4j.pojo.SNSUserInfo;
 import top.spanky.wx4j.pojo.WeixinOauth2Token;
 import top.spanky.wx4j.util.AdvancedUtil;
 
-public class DebugFilter implements Filter {
+/**
+ * Servlet implementation class AuthoServlet
+ */
+public class AuthoServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
-    public void destroy() {
-    }
-
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse) resp;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         // 用户同意授权后，能获取到code
         String code = request.getParameter("code");
+        System.out.println(code);
         if (StringUtil.isEmpty(code)) {
             // 跳转到index.jsp
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            System.out.println(request.getContextPath());
+            request.getRequestDispatcher(request.getContextPath() + "/index.jsp").forward(request, response);
+            return;
         }
         // 用户同意授权
         if (!"authdeny".equals(code)) {
@@ -52,11 +50,12 @@ public class DebugFilter implements Filter {
         }
         // 跳转到index.jsp
         request.getRequestDispatcher("index.jsp").forward(request, response);
-        chain.doFilter(request, response);
     }
 
     @Override
-    public void init(FilterConfig fConfig) throws ServletException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
 }

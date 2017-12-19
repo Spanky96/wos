@@ -4,9 +4,6 @@ import java.util.List;
 
 /**
  * 通过网页授权获取的用户信息
- *
- * @author liufeng
- * @date 2013-11-09
  */
 public class SNSUserInfo {
     // 用户标识
@@ -89,4 +86,5 @@ public class SNSUserInfo {
     public void setPrivilegeList(List<String> privilegeList) {
         this.privilegeList = privilegeList;
     }
+
 }

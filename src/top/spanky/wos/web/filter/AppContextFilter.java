@@ -33,7 +33,7 @@ public class AppContextFilter implements Filter {
         AppContext appContext = AppContext.getAppContext();
         AppContext.setContextPath(request.getContextPath());
         // TODO
-        System.out.println("AppContextFilter|" + request.getContextPath());
+        System.out.println("AppContextFilter|" + request.getRequestURI());
         HttpSession session = request.getSession();
         appContext.addObject(Constants.APP_CONTEXT_SESSION, session);
         User user = (User) session.getAttribute("USER");
