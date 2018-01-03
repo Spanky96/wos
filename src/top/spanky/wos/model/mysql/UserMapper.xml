@@ -8,6 +8,7 @@
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
         <result column="phone_number" property="phoneNumber"/>
         <result column="openid" property="openid"/>
         <result column="is_active" property="isActive"/>
@@ -16,6 +17,12 @@
     <select id="getByUsername" parameterType="String" resultMap="userMap">
         <![CDATA[
             SELECT * FROM user WHERE username = #{username}
+        ]]>
+    </select>
+
+        <select id="getByOpenID" parameterType="String" resultMap="userMap">
+        <![CDATA[
+            SELECT * FROM user WHERE openid = #{openid}
         ]]>
     </select>
 
