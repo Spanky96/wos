@@ -1,5 +1,7 @@
 package top.spanky.wos.controller;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,31 +68,19 @@ public class UserController extends BaseController {
     @ResponseBody
     public ModelMap testAutho(@RequestParam(value = "code", defaultValue = "") String code) {
         ModelMap modelMap = new ModelMap();
-        System.out.println(code); // TODO
-        if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
-            logger.info("非法访问或用户拒绝");
-            return null;
+        System.out.println("code:" + code); // TODO
+        SNSUserInfo snsUserInfo = new SNSUserInfo();
+        snsUserInfo.setNickname("Spanky Yang");
+        // oh56I1vlzWwbJ4SeS4STPyqbPAns
+        snsUserInfo.setOpenId("oh56I1vlzWwbJ4SeS4STPyqbPAns");
+        snsUserInfo.setSex(1);
+        User user = userService.getByOpenid("oh56I1vlzWwbJ4SeS4STPyqbPAns");
+        if (user == null) {
+            modelMap.put("redirect", "register");
         } else {
-            String APPID = "APPID";
-            String SECRET = "SECRET";
-            APPID = "wx107ce995902d1e0b";
-            SECRET = "efe75778beabfdd1afe1118638d22af8";
-            // 获取网页授权access_token
-            WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
-            if (weixinOauth2Token == null) {
-                logger.info("获取失败");
-                return null;
-            }
-            // 网页授权接口访问凭证
-            String accessToken = weixinOauth2Token.getAccessToken();
-            // 用户标识
-            String openId = weixinOauth2Token.getOpenId();
-            // 获取用户信息
-            SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
-
-            // 设置要传递的参数
-            modelMap.put("snsUserInfo", snsUserInfo);
+            modelMap.put("redirect", "sell");
         }
+        modelMap.put("snsUserInfo", snsUserInfo);
         return modelMap;
     }
 
@@ -123,6 +113,10 @@ public class UserController extends BaseController {
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date().getTime());
     }
 
 }
