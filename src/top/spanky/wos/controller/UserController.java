@@ -1,7 +1,6 @@
 package top.spanky.wos.controller;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import top.spanky.wos.Constants;
 import top.spanky.wos.model.User;
 import top.spanky.wos.service.UserService;
+import top.spanky.wos.util.PropertyUtil;
 import top.spanky.wos.util.StringUtil;
-import top.spanky.wx4j.message.req.BaseMessage;
 import top.spanky.wx4j.message.resp.TextMessage;
 import top.spanky.wx4j.pojo.SNSUserInfo;
 import top.spanky.wx4j.pojo.WeixinOauth2Token;
@@ -73,8 +72,8 @@ public class UserController extends BaseController {
         } else {
             String APPID = "APPID";
             String SECRET = "SECRET";
-            APPID = "wx107ce995902d1e0b";
-            SECRET = "efe75778beabfdd1afe1118638d22af8";
+            APPID = PropertyUtil.get("appid");
+            SECRET = PropertyUtil.get("secret");
             // 获取网页授权access_token
             WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
             if (weixinOauth2Token == null) {
@@ -108,8 +107,8 @@ public class UserController extends BaseController {
         }      
         String APPID = "APPID";
         String SECRET = "SECRET";
-        APPID = "wx107ce995902d1e0b";
-        SECRET = "efe75778beabfdd1afe1118638d22af8";
+        APPID = PropertyUtil.get("appid");
+        SECRET = PropertyUtil.get("secret");
         // 获取网页授权access_token
         WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
         if (weixinOauth2Token == null) {
@@ -125,7 +124,7 @@ public class UserController extends BaseController {
         System.out.println(snsUserInfo);
         // 设置要传递的参数
         modelMap.put("snsUserInfo", snsUserInfo);
-        
+       
         return modelMap;
     }
 
@@ -158,6 +157,10 @@ public class UserController extends BaseController {
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date().getTime());
     }
 
 }

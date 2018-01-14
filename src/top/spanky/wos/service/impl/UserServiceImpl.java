@@ -8,16 +8,16 @@ import top.spanky.wos.service.UserService;
 import top.spanky.wos.util.StringUtil;
 
 public class UserServiceImpl implements UserService {
-	
+
     private UserDao userDao;
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
 
-	@Override
-	public User login(String username, String password) throws ParameterException, ServiceException {
-		ParameterException parameterException = null;
+    @Override
+    public User login(String username, String password) throws ParameterException, ServiceException {
+        ParameterException parameterException = null;
 
         if (StringUtil.isEmpty(username)) {
             parameterException = new ParameterException();
@@ -31,18 +31,21 @@ public class UserServiceImpl implements UserService {
             parameterException.addErrorField("password", "Password is required");
         }
 
-        if (parameterException != null) {
+        if (parameterException != null)
             throw parameterException;
-        }
 
         User user = userDao.getByUsername(username);
 
-        if (user == null || !password.equals(user.getPassword())) {
+        if ((user == null) || !password.equals(user.getPassword()))
             throw new ServiceException(ServiceException.VALID_LOGIN_MESSAGE);
-        }
 
         return user;
 
     }
-    
+
+    @Override
+    public User getByOpenid(String openid) {
+        return userDao.getByOpenID(openid);
+    }
+
 }

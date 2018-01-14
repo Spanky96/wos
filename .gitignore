@@ -1,1 +1,7 @@
 /build/
+/config/app.properties
+/config/app.log4j.properties
+.DS_Store
+.classPath
+.project
+.tern-project
