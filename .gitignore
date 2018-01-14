@@ -1,6 +1,6 @@
 /build/
 /config/app.properties
-/config/app.log4j.properties
+/config/log4j.properties
 .DS_Store
 .classPath
 .project
