@@ -60,7 +60,7 @@ td {
     </tr>
     <tr>
       <td>头像</td>
-      <td><%=user.getHeadImgUrl()%></td>
+      <td><img src="<%=user.getHeadImgUrl()%>"></td>
     </tr>
     <tr>
       <td>特权</td>

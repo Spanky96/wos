@@ -1,5 +1,11 @@
 package top.spanky.wos.controller;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +21,12 @@ import top.spanky.wos.Constants;
 import top.spanky.wos.model.User;
 import top.spanky.wos.service.UserService;
 import top.spanky.wos.util.StringUtil;
+import top.spanky.wx4j.message.req.BaseMessage;
+import top.spanky.wx4j.message.resp.TextMessage;
 import top.spanky.wx4j.pojo.SNSUserInfo;
 import top.spanky.wx4j.pojo.WeixinOauth2Token;
 import top.spanky.wx4j.util.AdvancedUtil;
+import top.spanky.wx4j.util.MessageUtil;
 
 @Controller
 @RequestMapping(Constants.APP_URL_PREFIX)
@@ -29,10 +38,35 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value = "/development", method = RequestMethod.POST)
+    @ResponseBody
+    public String dev(HttpServletRequest request) {
+    	Map<String, String> requestMap = null;
+		try {
+			requestMap = MessageUtil.parseXml(request);
+		} catch (Exception e) {
+			logger.error("valid request");
+			e.printStackTrace();
+			return null;
+		}
+		
+		for (String key : requestMap.keySet()){
+			System.out.println(key + requestMap.get(key));
+		}
+
+    	TextMessage tm = new TextMessage();
+    	tm.setFromUserName(requestMap.get("ToUserName"));
+    	tm.setCreateTime(new Date().getTime()/1000);
+    	tm.setToUserName(requestMap.get("FromUserName"));
+    	tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
+    	tm.setContent("http://bjcf.spanky.top:8080");
+    	return MessageUtil.messageToXml(tm);
+    }
+
     @RequestMapping(value = "/oauth", method = RequestMethod.GET)
     public ModelAndView autho(@RequestParam(value = "code", defaultValue = "") String code) {
         ModelAndView modelAndView = new ModelAndView();
-        System.out.println(code);// TODO
+        System.out.println("code:" + code);// TODO
         if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
             logger.info("非法访问或用户拒绝");
             return null;
@@ -65,32 +99,33 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/oauth2", method = RequestMethod.GET)
     @ResponseBody
     public ModelMap testAutho(@RequestParam(value = "code", defaultValue = "") String code) {
-        ModelMap modelMap = new ModelMap();
-        System.out.println(code); // TODO
+    	ModelMap modelMap = new ModelMap();
+        System.out.println("code" + code); // TODO
         if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
             logger.info("非法访问或用户拒绝");
+            System.out.println(1);
             return null;
-        } else {
-            String APPID = "APPID";
-            String SECRET = "SECRET";
-            APPID = "wx107ce995902d1e0b";
-            SECRET = "efe75778beabfdd1afe1118638d22af8";
-            // 获取网页授权access_token
-            WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
-            if (weixinOauth2Token == null) {
-                logger.info("获取失败");
-                return null;
-            }
-            // 网页授权接口访问凭证
-            String accessToken = weixinOauth2Token.getAccessToken();
-            // 用户标识
-            String openId = weixinOauth2Token.getOpenId();
-            // 获取用户信息
-            SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
-
-            // 设置要传递的参数
-            modelMap.put("snsUserInfo", snsUserInfo);
+        }      
+        String APPID = "APPID";
+        String SECRET = "SECRET";
+        APPID = "wx107ce995902d1e0b";
+        SECRET = "efe75778beabfdd1afe1118638d22af8";
+        // 获取网页授权access_token
+        WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
+        if (weixinOauth2Token == null) {
+            logger.info("获取失败");
+            return null;
         }
+        // 网页授权接口访问凭证
+        String accessToken = weixinOauth2Token.getAccessToken();
+        // 用户标识
+        String openId = weixinOauth2Token.getOpenId();
+        // 获取用户信息
+        SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
+        System.out.println(snsUserInfo);
+        // 设置要传递的参数
+        modelMap.put("snsUserInfo", snsUserInfo);
+        
         return modelMap;
     }
 

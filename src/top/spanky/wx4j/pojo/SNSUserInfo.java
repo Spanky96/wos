@@ -87,4 +87,13 @@ public class SNSUserInfo {
         this.privilegeList = privilegeList;
     }
 
+	@Override
+	public String toString() {
+		return "SNSUserInfo [openId=" + openId + ", nickname=" + nickname + ", sex=" + sex + ", country=" + country
+				+ ", province=" + province + ", city=" + city + ", headImgUrl=" + headImgUrl + ", privilegeList="
+				+ privilegeList + "]";
+	}
+    
+    
+
 }

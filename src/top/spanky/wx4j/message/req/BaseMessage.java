@@ -57,4 +57,12 @@ public class BaseMessage {
     public void setMsgId(long msgId) {
         MsgId = msgId;
     }
+
+	@Override
+	public String toString() {
+		return "BaseMessage [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime
+				+ ", MsgType=" + MsgType + ", MsgId=" + MsgId + "]";
+	}
+    
+    
 }
