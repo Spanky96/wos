@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import top.spanky.wos.Constants;
 import top.spanky.wos.model.User;
 import top.spanky.wos.service.UserService;
+import top.spanky.wos.util.PropertyUtil;
 import top.spanky.wos.util.StringUtil;
 import top.spanky.wx4j.pojo.SNSUserInfo;
 import top.spanky.wx4j.pojo.WeixinOauth2Token;
@@ -41,8 +42,8 @@ public class UserController extends BaseController {
         } else {
             String APPID = "APPID";
             String SECRET = "SECRET";
-            APPID = "wx107ce995902d1e0b";
-            SECRET = "efe75778beabfdd1afe1118638d22af8";
+            APPID = PropertyUtil.get("appid");
+            SECRET = PropertyUtil.get("secret");
             // 获取网页授权access_token
             WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
             if (weixinOauth2Token == null) {
