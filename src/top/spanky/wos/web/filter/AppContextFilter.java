@@ -30,6 +30,7 @@ public class AppContextFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request =(HttpServletRequest) servletRequest;
         HttpServletResponse response =(HttpServletResponse) servletResponse;
+        response.setHeader("Access-Control-Allow-Origin", "*");
         AppContext appContext = AppContext.getAppContext();
         AppContext.setContextPath(request.getContextPath());
         // TODO

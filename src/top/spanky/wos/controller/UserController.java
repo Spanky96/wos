@@ -40,10 +40,8 @@ public class UserController extends BaseController {
             logger.info("非法访问或用户拒绝");
             return null;
         } else {
-            String APPID = "APPID";
-            String SECRET = "SECRET";
-            APPID = PropertyUtil.get("appid");
-            SECRET = PropertyUtil.get("secret");
+            String APPID = PropertyUtil.get("appid");
+            String SECRET = PropertyUtil.get("secret");
             // 获取网页授权access_token
             WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
             if (weixinOauth2Token == null) {
