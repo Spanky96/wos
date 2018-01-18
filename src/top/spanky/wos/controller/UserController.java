@@ -70,10 +70,8 @@ public class UserController extends BaseController {
             logger.info("非法访问或用户拒绝");
             return null;
         } else {
-            String APPID = "APPID";
-            String SECRET = "SECRET";
-            APPID = PropertyUtil.get("appid");
-            SECRET = PropertyUtil.get("secret");
+            String APPID = PropertyUtil.get("appid");
+            String SECRET = PropertyUtil.get("secret");
             // 获取网页授权access_token
             WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
             if (weixinOauth2Token == null) {
@@ -105,24 +103,17 @@ public class UserController extends BaseController {
             System.out.println(1);
             return null;
         }      
-        String APPID = "APPID";
-        String SECRET = "SECRET";
-        APPID = PropertyUtil.get("appid");
-        SECRET = PropertyUtil.get("secret");
-        // 获取网页授权access_token
+        String APPID = PropertyUtil.get("appid");
+        String SECRET = PropertyUtil.get("secret");
         WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
         if (weixinOauth2Token == null) {
             logger.info("获取失败");
             return null;
         }
-        // 网页授权接口访问凭证
         String accessToken = weixinOauth2Token.getAccessToken();
-        // 用户标识
         String openId = weixinOauth2Token.getOpenId();
-        // 获取用户信息
         SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
         System.out.println(snsUserInfo);
-        // 设置要传递的参数
         modelMap.put("snsUserInfo", snsUserInfo);
        
         return modelMap;
@@ -157,10 +148,6 @@ public class UserController extends BaseController {
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
 
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date().getTime());
     }
 
 }
