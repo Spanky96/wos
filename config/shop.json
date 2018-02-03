@@ -1,0 +1,16 @@
+{
+      "seller": {
+        "name": "滨江厨房（一鸣店）",
+        "description": "小鸣专车",
+        "deliveryTime": 20,
+        "score": 4.8,
+        "serviceScore": 4.1,
+        "foodScore": 4.3,
+        "rankRate": 69.2,
+        "minPrice": 0.2,
+        "deliveryPrice": 0.04,
+        "ratingCount": 24,
+        "sellCount": 90,
+        "bulletin": "滨江厨房于南京信息工程大学滨江学院2014级学长仰一鸣创立．创立以来就以一流的口味、细致的服务、实惠的价格、舒适的餐厅环境引得了很好的口碑．蝉联滨江学院十佳菜肴餐厅．2018年春学期起，滨江厨房微信外卖餐厅正式投入使用．"
+        }
+}
