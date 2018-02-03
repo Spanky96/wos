@@ -102,7 +102,6 @@ public class UserController extends BaseController {
         System.out.println("code" + code); // TODO
         if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
             logger.info("非法访问或用户拒绝");
-            System.out.println(1);
             return null;
         }      
         String APPID = "APPID";
@@ -122,6 +121,12 @@ public class UserController extends BaseController {
         // 获取用户信息
         SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
         System.out.println(snsUserInfo);
+        User user = userService.getByOpenid(snsUserInfo.getOpenId());
+        if (user == null) {
+            modelMap.put("redirect", "register");
+        } else {
+            modelMap.put("redirect", "sell");
+        }
         // 设置要传递的参数
         modelMap.put("snsUserInfo", snsUserInfo);
        
