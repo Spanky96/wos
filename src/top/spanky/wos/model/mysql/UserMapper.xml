@@ -16,13 +16,13 @@
 
     <select id="getByUsername" parameterType="String" resultMap="userMap">
         <![CDATA[
-            SELECT * FROM user WHERE username = #{username}
+            SELECT * FROM users WHERE username = #{username}
         ]]>
     </select>
 
         <select id="getByOpenID" parameterType="String" resultMap="userMap">
         <![CDATA[
-            SELECT * FROM user WHERE openid = #{openid}
+            SELECT * FROM users WHERE openid = #{openid}
         ]]>
     </select>
 
