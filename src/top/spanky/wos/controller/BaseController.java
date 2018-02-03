@@ -6,6 +6,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import top.spanky.wos.AppContext;
+import top.spanky.wos.Constants;
+import top.spanky.wos.controller.resource.BasicResponse;
 import top.spanky.wos.model.User;
 import top.spanky.wos.util.PathUtil;
 import top.spanky.wos.util.SessionUtil;
@@ -28,17 +30,15 @@ public abstract class BaseController {
 
     public String getUserName() {
         User user = getUser();
-        if (user != null) {
+        if (user != null)
             return user.getUsername();
-        }
         return "";
     }
 
     public int getUserId() {
         User user = getUser();
-        if (user != null) {
+        if (user != null)
             return user.getId();
-        }
         return -1;
     }
 
@@ -61,4 +61,12 @@ public abstract class BaseController {
     protected void invalidate() {
         SessionUtil.invalidate();
     }
+
+    protected BasicResponse SUCCESS = new BasicResponse(Constants.RESPONSE_SUCCESS_VALUE,
+            Constants.RESPONSE_SUCCESS_MESSAGE);
+    protected BasicResponse FAIL = new BasicResponse(Constants.RESPONSE_FAIL_VALUE, Constants.RESPONSE_FAIL_MESSAGE);
+    protected BasicResponse REJECT = new BasicResponse(Constants.RESPONSE_REJECT_VALUE,
+            Constants.RESPONSE_REJECT_MESSAGE);
+    protected BasicResponse EXCEPTION = new BasicResponse(Constants.RESPONSE_EXCEPTION_VALUE,
+            Constants.RESPONSE_EXCEPTION_MESSAGE);
 }

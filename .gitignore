@@ -2,6 +2,7 @@
 /config/app.properties
 /config/log4j.properties
 .DS_Store
-.classPath
+.classpath
 .project
 .tern-project
+.settings

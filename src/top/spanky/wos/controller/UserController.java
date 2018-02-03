@@ -40,26 +40,26 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/development", method = RequestMethod.POST)
     @ResponseBody
     public String dev(HttpServletRequest request) {
-    	Map<String, String> requestMap = null;
-		try {
-			requestMap = MessageUtil.parseXml(request);
-		} catch (Exception e) {
-			logger.error("valid request");
-			e.printStackTrace();
-			return null;
-		}
-		
-		for (String key : requestMap.keySet()){
-			System.out.println(key + requestMap.get(key));
-		}
+        Map<String, String> requestMap = null;
+        try {
+            requestMap = MessageUtil.parseXml(request);
+        } catch (Exception e) {
+            logger.error("valid request");
+            e.printStackTrace();
+            return null;
+        }
 
-    	TextMessage tm = new TextMessage();
-    	tm.setFromUserName(requestMap.get("ToUserName"));
-    	tm.setCreateTime(new Date().getTime()/1000);
-    	tm.setToUserName(requestMap.get("FromUserName"));
-    	tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
-    	tm.setContent("http://bjcf.spanky.top:8080");
-    	return MessageUtil.messageToXml(tm);
+        for (String key : requestMap.keySet()) {
+            System.out.println(key + requestMap.get(key));
+        }
+
+        TextMessage tm = new TextMessage();
+        tm.setFromUserName(requestMap.get("ToUserName"));
+        tm.setCreateTime(new Date().getTime() / 1000);
+        tm.setToUserName(requestMap.get("FromUserName"));
+        tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
+        tm.setContent("http://bjcf.spanky.top:8080");
+        return MessageUtil.messageToXml(tm);
     }
 
     @RequestMapping(value = "/oauth", method = RequestMethod.GET)
@@ -70,10 +70,8 @@ public class UserController extends BaseController {
             logger.info("非法访问或用户拒绝");
             return null;
         } else {
-            String APPID = "APPID";
-            String SECRET = "SECRET";
-            APPID = PropertyUtil.get("appid");
-            SECRET = PropertyUtil.get("secret");
+            String APPID = PropertyUtil.get("appid");
+            String SECRET = PropertyUtil.get("secret");
             // 获取网页授权access_token
             WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
             if (weixinOauth2Token == null) {
@@ -162,10 +160,6 @@ public class UserController extends BaseController {
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
 
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date().getTime());
     }
 
 }
