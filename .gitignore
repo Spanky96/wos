@@ -1,5 +1,5 @@
 /build/
-/config/*.properties
+
 .DS_Store
 .classpath
 .project
