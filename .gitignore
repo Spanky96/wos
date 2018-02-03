@@ -1,6 +1,7 @@
 /build/
-/config/
+/config/*.properties
 .DS_Store
-.classPath
+.classpath
 .project
 .tern-project
+.settings
