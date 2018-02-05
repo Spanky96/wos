@@ -97,19 +97,37 @@ public class UserController extends BaseController {
     @ResponseBody
     public ModelMap testAutho(@RequestParam(value = "code", defaultValue = "") String code) {
         ModelMap modelMap = new ModelMap();
-        System.out.println("code:" + code); // TODO
-        SNSUserInfo snsUserInfo = new SNSUserInfo();
-        snsUserInfo.setNickname("Spanky Yang");
-        // oh56I1vlzWwbJ4SeS4STPyqbPAns
-        snsUserInfo.setOpenId("oh56I1vlzWwbJ4SeS4STPyqbPAns");
-        snsUserInfo.setSex(1);
-        User user = userService.getByOpenid("oh56I1vlzWwbJ4SeS4STPyqbPAns");
+        System.out.println("code" + code); // TODO
+        if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
+            logger.info("非法访问或用户拒绝");
+            return null;
+        }
+        String APPID = "APPID";
+        String SECRET = "SECRET";
+        APPID = PropertyUtil.get("appid");
+        SECRET = PropertyUtil.get("secret");
+        // 获取网页授权access_token
+        WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
+        if (weixinOauth2Token == null) {
+            logger.info("获取失败");
+            return null;
+        }
+        // 网页授权接口访问凭证
+        String accessToken = weixinOauth2Token.getAccessToken();
+        // 用户标识
+        String openId = weixinOauth2Token.getOpenId();
+        // 获取用户信息
+        SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
+        System.out.println(snsUserInfo);
+        User user = userService.getByOpenid(snsUserInfo.getOpenId());
         if (user == null) {
             modelMap.put("redirect", "register");
         } else {
             modelMap.put("redirect", "sell");
         }
+        // 设置要传递的参数
         modelMap.put("snsUserInfo", snsUserInfo);
+
         return modelMap;
     }
 

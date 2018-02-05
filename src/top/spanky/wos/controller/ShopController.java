@@ -16,18 +16,22 @@ import top.spanky.wos.Constants;
 import top.spanky.wos.controller.resource.BasicResponse;
 import top.spanky.wos.json.MyJsonConfig;
 import top.spanky.wos.json.MyJsonService;
+import top.spanky.wos.model.ShopRating;
 import top.spanky.wos.service.FoodService;
+import top.spanky.wos.service.ShopRatingService;
 
 @Controller
 @RequestMapping(Constants.APP_URL_PREFIX)
-public class TestController extends BaseController {
+public class ShopController extends BaseController {
 
-    private final Logger logger = Logger.getLogger(TestController.class);
+    private final Logger logger = Logger.getLogger(ShopController.class);
 
     @Autowired
     private MyJsonService myJsonService;
     @Autowired
     private FoodService foodService;
+    @Autowired
+    private ShopRatingService shopRatingService;
 
     @RequestMapping(value = "/load-shopinfo", method = RequestMethod.GET)
     @ResponseBody
@@ -42,5 +46,14 @@ public class TestController extends BaseController {
     @ResponseBody
     public BasicResponse setBasicShopConfig(@RequestBody JSONObject config) {
         return myJsonService.setBasicInfoJsonFile(config) ? SUCCESS : FAIL;
+    }
+
+    @RequestMapping(value = "/all-shopratings", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getAllShopRatings() {
+        List<ShopRating> shopRatings = shopRatingService.getAllShopRatings();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ratings", JSONArray.fromObject(shopRatings, MyJsonConfig.getMyJsonConfig()));
+        return jsonObject;
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.FoodRating">
+
+    <resultMap type="FoodRating" id="basicFoodRatingMap">
+         <id column="id" property="id"/>
+         <result column="food_id" property="foodId"/>
+         <result column="user_id" property="userId"/>
+         <result column="text" property="text"/>
+         <result column="time" property="time"/>
+         <result column="type" property="type"/>
+    </resultMap>
+
+    <resultMap type="FoodRating" id="foodRatingOnFoodMap" extends="basicFoodRatingMap">
+         <result column="avatar" property="avatar"/>
+         <result column="username" property="displayStr"/>
+    </resultMap>
+    
+    <resultMap type="FoodRating" id="foodRatingOnUserMap" extends="basicFoodRatingMap">
+         <result column="icon" property="avatar"/>
+         <result column="name" property="displayStr"/>
+    </resultMap>
+
+    <select id="getFoodRatingsByFoodId" parameterType="int" resultMap="foodRatingOnFoodMap">
+        <![CDATA[
+            SELECT * FROM food_ratings as a left join users as b ON a.user_id = b.id WHERE a.food_id = #{id};
+        ]]>
+    </select>
+    
+    <select id="getFoodRatingsByUserId" parameterType="int" resultMap="foodRatingOnUserMap">
+        <![CDATA[
+            SELECT * FROM food_ratings as a left join foods as b ON a.food_id = b.id WHERE a.user_id = #{id};
+        ]]>
+    </select>
+
+</mapper>

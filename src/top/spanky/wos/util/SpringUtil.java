@@ -1,14 +1,13 @@
 package top.spanky.wos.util;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import top.spanky.wos.service.FoodService;
+import net.sf.json.JSONObject;
+import top.spanky.wos.service.ShopRatingService;
 
 public class SpringUtil implements ApplicationContextAware {
 
@@ -34,14 +33,19 @@ public class SpringUtil implements ApplicationContextAware {
     @Test
     public void test1() {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        FoodService us = (FoodService) ac.getBean("foodService");
+        // FoodService us = (FoodService) ac.getBean("foodService");
+        //
+        // List allFoods = us.getAllFoods();
+        // for (Object object : allFoods) {
+        // System.out.println(object);
+        // }
+        // System.out.println(us.getFoodById(1));
+        // System.out.println(us.getFoodById(3));
+        ShopRatingService us = (ShopRatingService) ac.getBean("shopRatingService");
 
-        List allFoods = us.getAllFoods();
-        for (Object object : allFoods) {
-            System.out.println(object);
-        }
-        System.out.println(us.getFoodById(1));
-        System.out.println(us.getFoodById(3));
+        System.out.println(JSONObject.fromObject(us.getAllShopRatings().get(0)));
+
+        System.out.println(JSONObject.fromObject(us.getShopRatingsByUserId(1).get(0)));
 
     }
 }
