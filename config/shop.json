@@ -1,7 +1,7 @@
 {
   "seller": {
     "name": "滨江厨房（一鸣店）",
-    "description": "小鸣专车",
+    "description": "小鸣专车/20分钟送达",
     "deliveryTime": 20,
     "score": 4.8,
     "serviceScore": 4.1,
@@ -15,26 +15,31 @@
     "supports": [
       {
         "type": 0,
+        "icon": "decrease",
         "description": "在线支付满0.25减0.05"
       },
       {
         "type": 1,
+        "icon": "discount",
         "description": "VC无限橙果汁全场8折"
       },
       {
         "type": 2,
+        "icon": "special",
         "description": "单人精彩套餐"
       },
       {
         "type": 3,
+        "icon": "invoice",
         "description": "该商家支持发票"
       },
       {
         "type": 4,
+        "icon": "guarantee",
         "description": "滨江学院十佳菜肴，健康美味保证"
       }],
-    "avatar": "src/components/header/cooker.png",
-    "background" : "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+    "avatar": "imgs/cooker.png",
+    "background" : "http://bjxy.cn/images/leftpic.jpg",
     "pics": [
       "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180",
       "http://fuss10.elemecdn.com/b/6c/75bd250e5ba69868f3b1178afbda3jpeg.jpeg?imageView2/1/w/180/h/180",

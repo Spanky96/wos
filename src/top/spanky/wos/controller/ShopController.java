@@ -14,8 +14,10 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import top.spanky.wos.Constants;
 import top.spanky.wos.controller.resource.BasicResponse;
+import top.spanky.wos.controller.resource.FoodResource;
 import top.spanky.wos.json.MyJsonConfig;
 import top.spanky.wos.json.MyJsonService;
+import top.spanky.wos.model.Food;
 import top.spanky.wos.model.ShopRating;
 import top.spanky.wos.service.FoodService;
 import top.spanky.wos.service.ShopRatingService;
@@ -37,9 +39,14 @@ public class ShopController extends BaseController {
     @ResponseBody
     public JSONObject loadShopInfo() {
         JSONObject shopInfo = myJsonService.getShopBasicInfo();
-        List foods = foodService.getAllFoods();
-        shopInfo.put("foods", JSONArray.fromObject(foods, MyJsonConfig.getMyJsonConfig()));
         return shopInfo;
+    }
+
+    @RequestMapping(value = "/load-foodinfo", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject loadFoodsInfo() {
+        List<Food> foods = foodService.getAllFoods();
+        return JSONObject.fromObject(new FoodResource(foods));
     }
 
     @RequestMapping(value = "/update-shopConfig", method = RequestMethod.POST)

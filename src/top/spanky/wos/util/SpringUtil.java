@@ -1,13 +1,17 @@
 package top.spanky.wos.util;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import net.sf.json.JSONObject;
-import top.spanky.wos.service.ShopRatingService;
+import net.sf.json.JSONArray;
+import top.spanky.wos.controller.resource.FoodResource;
+import top.spanky.wos.model.Food;
+import top.spanky.wos.service.FoodService;
 
 public class SpringUtil implements ApplicationContextAware {
 
@@ -33,19 +37,22 @@ public class SpringUtil implements ApplicationContextAware {
     @Test
     public void test1() {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        // FoodService us = (FoodService) ac.getBean("foodService");
-        //
-        // List allFoods = us.getAllFoods();
-        // for (Object object : allFoods) {
-        // System.out.println(object);
-        // }
+        FoodService us = (FoodService) ac.getBean("foodService");
+
+        List<Food> allFoods = us.getAllFoods();
+
+        FoodResource resource = new FoodResource(allFoods);
+
+        // System.out.println(resource.getFoods());
+        System.out.println(JSONArray.fromObject(resource));
+
         // System.out.println(us.getFoodById(1));
         // System.out.println(us.getFoodById(3));
-        ShopRatingService us = (ShopRatingService) ac.getBean("shopRatingService");
-
-        System.out.println(JSONObject.fromObject(us.getAllShopRatings().get(0)));
-
-        System.out.println(JSONObject.fromObject(us.getShopRatingsByUserId(1).get(0)));
+        // ShopRatingService us = (ShopRatingService) ac.getBean("shopRatingService");
+        //
+        // System.out.println(JSONObject.fromObject(us.getAllShopRatings().get(0)));
+        //
+        // System.out.println(JSONObject.fromObject(us.getShopRatingsByUserId(1).get(0)));
 
     }
 }

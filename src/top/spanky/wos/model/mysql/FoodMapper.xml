@@ -5,7 +5,7 @@
 
     <resultMap type="Food" id="basicFoodMap">
         <id column="id" property="id"/>
-        <id column="type_id" property="foodType"/>
+        <result column="type_id" property="foodType"/>
         <result column="name" property="name"/>
         <result column="info" property="info"/>
         <result column="description" property="description"/>

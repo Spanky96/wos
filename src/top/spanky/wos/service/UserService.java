@@ -9,4 +9,6 @@ public interface UserService {
     public User login(String username, String password) throws ParameterException, ServiceException;
 
     public User getByOpenid(String openid);
+
+    public boolean addUserByWX(User user);
 }

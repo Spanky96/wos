@@ -31,4 +31,12 @@
             SELECT * FROM users WHERE id = #{id}
         ]]>
     </select>
+
+    <insert id="addUserByWX" parameterType="User">
+        <![CDATA[
+        INSERT INTO users 
+        (username, name, openid, gender, phone_number, avatar, is_active)
+         VALUES (#{username}, #{name}, #{openid}, #{gender}, #{phoneNumber}, #{avatar}, 1)
+        ]]>
+    </insert>
 </mapper>
