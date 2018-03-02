@@ -38,7 +38,13 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/development", method = RequestMethod.POST)
+    @RequestMapping(value = "/dev", method = RequestMethod.GET)
+    @ResponseBody
+    public String devConfig(HttpServletRequest request) {
+        return request.getParameter("echostr");
+    }
+
+    @RequestMapping(value = "/dev", method = RequestMethod.POST)
     @ResponseBody
     public String dev(HttpServletRequest request) {
         Map<String, String> requestMap = null;
@@ -109,7 +115,7 @@ public class UserController extends BaseController {
             snsUserInfo.setHeadImgUrl(
                     "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2027227285,647776538&fm=58&s=D0B6047294A7E11114DFC0CD0200F0EA&bpow=121&bpoh=75");
             snsUserInfo.setNickname("Spanky Yym");
-            snsUserInfo.setOpenId("sdwqueqeuihwqewqeu");
+            snsUserInfo.setOpenId("testopenId");
             snsUserInfo.setProvince("江苏");
             snsUserInfo.setSex(1);
             modelMap.put("snsUserInfo", snsUserInfo);
@@ -167,8 +173,15 @@ public class UserController extends BaseController {
     public ModelMap doRegister(@RequestBody String userStr) {
         JSONObject obj = JSONObject.fromObject(userStr);
         User user = (User) JSONObject.toBean(obj, User.class);
-        boolean result = userService.addUserByWX(user);
         ModelMap modelMap = new ModelMap();
+        //// TEST CODE
+        if ("testopenId".equals(user.getOpenid())) {
+            modelMap.put("result", SUCCESS);
+            modelMap.put("user", user);
+            return modelMap;
+        }
+        ////
+        boolean result = userService.addUserByWX(user);
         if (result) {
             modelMap.put("result", SUCCESS);
             modelMap.put("user", user);

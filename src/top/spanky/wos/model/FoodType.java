@@ -2,8 +2,8 @@ package top.spanky.wos.model;
 
 public enum FoodType {
 
-    QT("其他", 0), YYZD("营养粥道", 1), JPCT("精品套餐", 2), XCZS("小吃主食", 3), JXRC("精选热菜", 4), SKLC("爽口凉菜", 5), YMYL("一鸣饮料",
-            6), ZPTJ("招牌推荐", 7);
+    QT("其他", 100), YYZD("营养粥道", 1), JPCT("精品套餐", 2), XCZS("小吃主食", 3), JXRC("精选热菜", 4), SKLC("爽口凉菜", 5), YMYL("一鸣饮料",
+            6), ZPTJ("招牌推荐", 0);
 
     private int index;
     private String name;

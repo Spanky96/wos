@@ -46,7 +46,7 @@ public class ShopController extends BaseController {
     @ResponseBody
     public JSONObject loadFoodsInfo() {
         List<Food> foods = foodService.getAllFoods();
-        return JSONObject.fromObject(new FoodResource(foods));
+        return JSONObject.fromObject(new FoodResource(foods), MyJsonConfig.getMyJsonConfig());
     }
 
     @RequestMapping(value = "/update-shopConfig", method = RequestMethod.POST)
