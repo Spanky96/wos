@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
         return userDao.getByOpenID(openid);
     }
 
+    @Override
+    public boolean addUserByWX(User user) {
+        return userDao.addByWX(user);
+    }
+
 }

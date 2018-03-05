@@ -19,7 +19,7 @@ public class MyJsonService {
         StringBuffer buffer = new StringBuffer();
         try {
             reader = new BufferedReader(
-                    new InputStreamReader(MyJsonService.class.getClassLoader().getResourceAsStream(FILE_NAME)));
+                    new InputStreamReader(MyJsonService.class.getClassLoader().getResourceAsStream(FILE_NAME), "UTF-8"));
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.sf.json.JSONObject;
 import top.spanky.wos.Constants;
 import top.spanky.wos.model.User;
 import top.spanky.wos.service.UserService;
@@ -37,7 +38,13 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/development", method = RequestMethod.POST)
+    @RequestMapping(value = "/dev", method = RequestMethod.GET)
+    @ResponseBody
+    public String devConfig(HttpServletRequest request) {
+        return request.getParameter("echostr");
+    }
+
+    @RequestMapping(value = "/dev", method = RequestMethod.POST)
     @ResponseBody
     public String dev(HttpServletRequest request) {
         Map<String, String> requestMap = null;
@@ -96,12 +103,29 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/oauth2", method = RequestMethod.GET)
     @ResponseBody
     public ModelMap testAutho(@RequestParam(value = "code", defaultValue = "") String code) {
-    	ModelMap modelMap = new ModelMap();
+        ModelMap modelMap = new ModelMap();
         System.out.println("code" + code); // TODO
-        if (StringUtil.isEmpty(code) || "authdeny".equals(code)) {
-            logger.info("非法访问或用户拒绝");
-            return null;
-        }      
+        if (StringUtil.isEmpty(code) || "authdeny".equals(code) || "1".equals(code)) {
+            // logger.info("非法访问或用户拒绝");
+            // return null;
+            //////
+            SNSUserInfo snsUserInfo = new SNSUserInfo();
+            snsUserInfo.setCity("无锡");
+            snsUserInfo.setCountry("中国");
+            snsUserInfo.setHeadImgUrl(
+                    "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2027227285,647776538&fm=58&s=D0B6047294A7E11114DFC0CD0200F0EA&bpow=121&bpoh=75");
+            snsUserInfo.setNickname("Spanky Yym");
+            snsUserInfo.setOpenId("testopenId");
+            snsUserInfo.setProvince("江苏");
+            snsUserInfo.setSex(1);
+            modelMap.put("snsUserInfo", snsUserInfo);
+            if ("1".equals(code)) {
+                modelMap.put("redirect", "register");
+            } else {
+                modelMap.put("redirect", "sell");
+            }
+            return modelMap;
+        }
         String APPID = "APPID";
         String SECRET = "SECRET";
         APPID = PropertyUtil.get("appid");
@@ -127,7 +151,7 @@ public class UserController extends BaseController {
         }
         // 设置要传递的参数
         modelMap.put("snsUserInfo", snsUserInfo);
-       
+        
         return modelMap;
     }
 
@@ -144,13 +168,26 @@ public class UserController extends BaseController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     @ResponseBody
-    public ModelMap doRegister(@RequestBody User user) {
-
-        System.out.println(user);
+    public ModelMap doRegister(@RequestBody String userStr) {
+        JSONObject obj = JSONObject.fromObject(userStr);
+        User user = (User) JSONObject.toBean(obj, User.class);
         ModelMap modelMap = new ModelMap();
-        modelMap.put("user", new User());
+        //// TEST CODE
+        if ("testopenId".equals(user.getOpenid())) {
+            modelMap.put("result", SUCCESS);
+            modelMap.put("user", user);
+            return modelMap;
+        }
+        ////
+        boolean result = userService.addUserByWX(user);
+        if (result) {
+            modelMap.put("result", SUCCESS);
+            modelMap.put("user", user);
+        } else {
+            modelMap.put("result", FAIL);
+        }
         return modelMap;
     }
 
@@ -159,7 +196,6 @@ public class UserController extends BaseController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
-
     }
 
 }

@@ -8,6 +8,7 @@ public class User {
     private Integer gender;
     private String openid;
     private String phoneNumber;
+    private String avatar;
     private boolean isActive;
 
     public Integer getId() {
@@ -64,6 +65,14 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public boolean isActive() {

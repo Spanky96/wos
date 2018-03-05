@@ -2,7 +2,7 @@ package top.spanky.wos.model;
 
 import java.sql.Timestamp;
 
-public class FoodRating {
+public class FoodRating extends DisplayInfo {
     private Integer id;
     private Integer foodId;
     private Integer userId;
@@ -61,8 +61,9 @@ public class FoodRating {
     @Override
     public String toString() {
         return "FoodRating [id=" + id + ", foodId=" + foodId + ", userId=" + userId + ", text=" + text + ", time="
-                + time + ", type=" + type + "]";
+                + time + ", type=" + type + ", avatar=" + getAvatar() + ", displayStr=" + getDisplayStr() + "]";
     }
+
 
 }
 
