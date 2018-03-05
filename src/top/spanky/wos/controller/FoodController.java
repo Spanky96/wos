@@ -3,13 +3,13 @@ package top.spanky.wos.controller;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import top.spanky.wos.Constants;
+import top.spanky.wos.model.Food;
 import top.spanky.wos.service.FoodService;
 import top.spanky.wos.service.UserService;
 
@@ -21,13 +21,13 @@ public class FoodController {
 
     @Autowired
     private UserService userService;
+    @Autowired
     private FoodService foodService;
 
-    @RequestMapping(value = "/shop", method = RequestMethod.GET)
+    @RequestMapping(value = "/food/{foodId}", method = RequestMethod.GET)
     @ResponseBody
-    public ModelMap testAutho(@RequestParam(value = "code", defaultValue = "") String code) {
-        ModelMap modelMap = new ModelMap();
-
-        return modelMap;
+    public Food get(@PathVariable int foodId) {
+        Food food = foodService.getFoodById(foodId);
+        return food;
     }
 }

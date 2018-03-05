@@ -32,7 +32,7 @@
         ]]>
     </select>
 
-    <insert id="addUserByWX" parameterType="User">
+    <insert id="addUserByWX" useGeneratedKeys="true" keyProperty="id" parameterType="User">
         <![CDATA[
         INSERT INTO users 
         (username, name, openid, gender, phone_number, avatar, is_active)

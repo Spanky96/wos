@@ -2,6 +2,8 @@ package top.spanky.wx4j.pojo;
 
 import java.util.List;
 
+import top.spanky.wos.model.User;
+
 /**
  * 通过网页授权获取的用户信息
  */
@@ -22,6 +24,8 @@ public class SNSUserInfo {
     private String headImgUrl;
     // 用户特权信息
     private List<String> privilegeList;
+
+    private User user;
 
     public String getOpenId() {
         return openId;
@@ -85,6 +89,14 @@ public class SNSUserInfo {
 
     public void setPrivilegeList(List<String> privilegeList) {
         this.privilegeList = privilegeList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

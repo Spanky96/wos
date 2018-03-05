@@ -55,6 +55,7 @@
     <bean id="foodDao" class="top.spanky.wos.dao.mybatis.FoodDaoImpl" parent="baseDao" />
     <bean id="foodRatingDao" class="top.spanky.wos.dao.mybatis.FoodRatingDaoImpl" parent="baseDao" />
     <bean id="shopRatingDao" class="top.spanky.wos.dao.mybatis.ShopRatingDaoImpl" parent="baseDao" />
+    <bean id="addressDao" class="top.spanky.wos.dao.mybatis.AddressDaoImpl" parent="baseDao" />
     
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"></property>
@@ -90,6 +91,10 @@
     
     <bean id="shopRatingService" class="top.spanky.wos.service.impl.ShopRatingServiceImpl" scope="singleton">
       <property name="shopRatingDao" ref="shopRatingDao" />
+    </bean>
+    
+    <bean id="addressService" class="top.spanky.wos.service.impl.AddressServiceImpl" scope="singleton">
+      <property name="addressDao" ref="addressDao" />
     </bean>
 
     <bean id="myJsonService" class="top.spanky.wos.json.MyJsonService" scope="singleton" />
