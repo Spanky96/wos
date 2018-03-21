@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.UserDiscount">
+
+    <resultMap type="UserDiscount" id="userDiscountMapper">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="discount_id" property="discountId"/>
+        <result column="time_start" property="timeStart"/>
+        <result column="time_over" property="timeOver"/>
+        <result column="used" property="isUsed"/>
+    </resultMap>
+
+    <select id="getAllByUserId" parameterType="int" resultMap="userDiscountMapper">
+        <![CDATA[
+            SELECT * FROM user_discount WHERE user_id = #{userId} AND used = 0;
+        ]]>
+    </select>
+
+    <select id="getByID" parameterType="int" resultMap="userDiscountMapper">
+        <![CDATA[
+            SELECT * FROM user_discount WHERE id = #{id};
+        ]]>
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="UserDiscount">
+        <![CDATA[
+        INSERT INTO user_discount 
+        (user_id, discount_id, time_start, time_over, used)
+         VALUES (#{userId}, #{discountId}, #{timeStart}, #{timeOver}, 0);
+        ]]>
+    </insert>
+
+    <update id="deleteById" parameterType="int">
+       <![CDATA[
+            UPDATE user_discount SET used = 1 WHERE id = #{id};
+        ]]>
+    </update>
+</mapper>

@@ -28,4 +28,20 @@ public class Constants {
     public static final String RESPONSE_FAIL_MESSAGE = "fail";
     public static final String RESPONSE_EXCEPTION_MESSAGE = "exception";
     public static final String RESPONSE_REJECT_MESSAGE = "reject";
+
+    public static final int ORDER_CLOSED = 0;
+    public static final int ORDER_PAYED = 1;
+    public static final int ORDER_CONFIRMED = 2;
+    public static final int ORDER_DELIVEYING = 3;
+    public static final int ORDER_DELIVEYED = 4;
+    public static final int ORDER_USER_RATED = 5;
+    public static final int ORDER_USER_SELLER_RATED = 6;
+
+    // Discount
+    // 通用1 满减2 打折3 免运4 随机立减5
+    public static final int DISCOUNT_COMMON = 1;
+    public static final int DISCOUNT_CONDITION = 2;
+    public static final int DISCOUNT_TAKEOFF = 3;
+    public static final int DISCOUNT_DELIVERY_FREE = 4;
+    public static final int DISCOUNT_RANDOM = 5;
 }

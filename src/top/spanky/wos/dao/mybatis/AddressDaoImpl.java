@@ -28,7 +28,7 @@ public class AddressDaoImpl extends SqlSessionDaoSupport implements AddressDao {
 
     @Override
     public boolean deleteById(int id) {
-        return getSqlSession().delete(CLASS_NAME + ".deleteById", id) > 0 ? true : false;
+        return getSqlSession().update(CLASS_NAME + ".deleteById", id) > 0 ? true : false;
     }
 
 }
