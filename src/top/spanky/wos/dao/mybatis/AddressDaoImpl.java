@@ -12,6 +12,11 @@ public class AddressDaoImpl extends SqlSessionDaoSupport implements AddressDao {
     private static final String CLASS_NAME = Address.class.getName();
 
     @Override
+    public Address getById(int id) {
+        return getSqlSession().selectOne(CLASS_NAME + ".getById", id);
+    }
+
+    @Override
     public List getAllAddressByUserId(int userId) {
         return getSqlSession().selectList(CLASS_NAME + ".getAllByUserId", userId);
     }

@@ -1,8 +1,11 @@
 package top.spanky.wos.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.spanky.wos.Constants;
+import top.spanky.wos.controller.pojo.CartListDTO;
+import top.spanky.wos.controller.pojo.UserOrderDTO;
 import top.spanky.wos.controller.resource.CartList;
 import top.spanky.wos.controller.resource.OrderResource;
 import top.spanky.wos.dao.AddressDao;
@@ -65,7 +68,44 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List getAllByUserId(int id) {
-        return orderDao.getAllByUserId(id);
+        List<Order> orderList = orderDao.getAllByUserId(id);
+        List<UserOrderDTO> userOrders = new ArrayList<>();
+        for (Order order : orderList) {
+            UserOrderDTO ur = new UserOrderDTO();
+            ur.setAddress(addressDao.getById(order.getAddressId()));
+            ur.setCartList(toCartList(order.getFoodList()));
+            ur.setCreateTime(order.getCreateTime().getTime());
+            ur.setDeliveryPrice(order.getDeliveryPrice());
+            ur.setFinalPrice(order.getFinalPrice());
+            ur.setOrderId(order.getId());
+            if (order.getDiscountId() != null) {
+                ur.setDiscount(discountDao.getById(order.getDiscountId()));
+                ur.setDiscountPrice(order.getDiscountPrice());
+            }
+            if (order.getDistributorId() != null) {
+                ur.setDistributor(distributorDao.getById(order.getDistributorId()));
+            }
+            ur.setFoodPrice(order.getFoodPrice());
+            ur.setStatus(order.getStatus());
+            userOrders.add(ur);
+        }
+        return userOrders;
+    }
+
+    private List<CartListDTO> toCartList(String listStr) {
+        List<CartListDTO> cartList = new ArrayList<>();
+        String[] itemsStr = listStr.substring(0, listStr.length() - 1).split("\\^");
+        for (String item : itemsStr) {
+            CartListDTO dto = new CartListDTO();
+            String[] info = item.split("\\#");
+            Food food = foodDao.getById(new Integer(info[0]));
+            dto.setId(food.getId());
+            dto.setName(food.getName());
+            dto.setPrice(food.getPrice());
+            dto.setNumber(new Integer(info[1]));
+            cartList.add(dto);
+        }
+        return cartList;
     }
 
     @Override

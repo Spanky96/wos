@@ -28,9 +28,18 @@ public class DiscountController extends BaseController {
 
     @RequestMapping(value = "/user-discounts/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public ModelMap getAllUserDiscount(@PathVariable int userId) {
+    public ModelMap getEnableDiscount(@PathVariable int userId) {
         ModelMap map = new ModelMap();
         List discounts = userDiscountService.getAllUseableDiscountByUserId(userId);
+        map.put("discounts", discounts);
+        return map;
+    }
+
+    @RequestMapping(value = "/user-allDiscounts/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelMap getAllDiscount(@PathVariable int userId) {
+        ModelMap map = new ModelMap();
+        List discounts = userDiscountService.getAllByUserId(userId);
         map.put("discounts", discounts);
         return map;
     }

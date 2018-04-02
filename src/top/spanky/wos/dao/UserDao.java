@@ -8,4 +8,6 @@ public interface UserDao {
     public User getByOpenID(String openid);
 
     public boolean addByWX(User user);
+
+    public boolean updateById(User user);
 }

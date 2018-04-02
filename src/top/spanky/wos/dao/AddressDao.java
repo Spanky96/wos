@@ -8,6 +8,8 @@ public interface AddressDao {
 
     public List getAllAddressByUserId(int userId);
 
+    public Address getById(int id);
+
     public boolean update(Address newAddress);
 
     public boolean add(Address newAddress);

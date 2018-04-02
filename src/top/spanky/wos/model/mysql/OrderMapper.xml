@@ -14,7 +14,7 @@
         <result column="delivery_price" property="deliveryPrice"/>
         <result column="discount_price" property="discountPrice"/>
         <result column="final_price" property="finalPrice"/>
-        <result column="discount_id" property="finalPrice"/>
+        <result column="discount_id" property="discountId"/>
         <result column="distributor_id" property="finalPrice"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>

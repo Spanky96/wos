@@ -32,7 +32,6 @@ public class SpringUtil implements ApplicationContextAware {
         return applicationContext.getBean(beanId);
     }
 
-
     @Test
     public void discountTest() {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");

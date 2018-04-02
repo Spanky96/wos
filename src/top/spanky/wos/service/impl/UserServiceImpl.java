@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserService {
         return userDao.addByWX(user);
     }
 
+    @Override
+    public boolean updateWxUser(User user) {
+        return userDao.updateById(user);
+    }
+
 }

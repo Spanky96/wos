@@ -11,6 +11,7 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
     private static final String SQL_ID_USER_GET_USER_BY_USERNAME = ".getByUsername";
     private static final String SQL_ID_USER_GET_USER_BY_OPENID = ".getByOpenID";
     private static final String SQL_ID_USER_ADD_USER_BY_WX = ".addUserByWX";
+    private static final String SQL_ID_UPDATE_WXUSER_BY_ID = ".updateWxUserById";
 
     @Override
     public User getByUsername(String username) {
@@ -25,6 +26,12 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
     @Override
     public boolean addByWX(User user) {
         int num = getSqlSession().insert(CLASS_NAME + SQL_ID_USER_ADD_USER_BY_WX, user);
+        return num == 1 ? true : false;
+    }
+
+    @Override
+    public boolean updateById(User user) {
+        int num = getSqlSession().update(CLASS_NAME + SQL_ID_UPDATE_WXUSER_BY_ID, user);
         return num == 1 ? true : false;
     }
 

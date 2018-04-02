@@ -39,4 +39,19 @@
          VALUES (#{username}, #{name}, #{openid}, #{gender}, #{phoneNumber}, #{avatar}, 1)
         ]]>
     </insert>
+    
+    <update id="updateWxUserById" parameterType="User">
+       <![CDATA[
+            UPDATE `users` 
+            SET 
+                username = #{username},
+                name = #{name},
+                gender = #{gender},
+                phone_number = #{phoneNumber},
+                avatar = #{avatar}
+            WHERE 
+                id = #{id}
+        ]]>
+    </update>
+    
 </mapper>

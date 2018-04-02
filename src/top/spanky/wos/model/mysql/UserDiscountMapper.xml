@@ -14,7 +14,7 @@
 
     <select id="getAllByUserId" parameterType="int" resultMap="userDiscountMapper">
         <![CDATA[
-            SELECT * FROM user_discount WHERE user_id = #{userId} AND used = 0;
+            SELECT * FROM user_discount WHERE user_id = #{userId};
         ]]>
     </select>
 

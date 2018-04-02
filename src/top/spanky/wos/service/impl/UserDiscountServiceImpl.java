@@ -3,7 +3,8 @@ package top.spanky.wos.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import top.spanky.wos.controller.pojo.UseableDiscountPO;
+import top.spanky.wos.controller.pojo.UseableDiscountDTO;
+import top.spanky.wos.controller.pojo.UserDiscountDTO;
 import top.spanky.wos.dao.DiscountDao;
 import top.spanky.wos.dao.UserDiscountDao;
 import top.spanky.wos.model.UserDiscount;
@@ -24,7 +25,12 @@ public class UserDiscountServiceImpl implements UserDiscountService {
 
     @Override
     public List getAllByUserId(int userId) {
-        return userDiscountDao.getAllByUserId(userId);
+        List<UserDiscount> discountList = userDiscountDao.getAllByUserId(userId);
+        List<UserDiscountDTO> resultList = new ArrayList<>();
+        for (UserDiscount discount : discountList) {
+            resultList.add(new UserDiscountDTO(discountDao.getById(discount.getDiscountId()), discount));
+        }
+        return resultList;
     }
 
     @Override
@@ -44,11 +50,11 @@ public class UserDiscountServiceImpl implements UserDiscountService {
 
     @Override
     public List getAllUseableDiscountByUserId(int userId) {
-        List<UserDiscount> discountList = getAllByUserId(userId);
-        List<UseableDiscountPO> resultList = new ArrayList<>();
+        List<UserDiscount> discountList = userDiscountDao.getAllByUserId(userId);
+        List<UseableDiscountDTO> resultList = new ArrayList<>();
         for (UserDiscount discount : discountList) {
             if (discount.validate()) {
-                resultList.add(new UseableDiscountPO(discountDao.getById(discount.getDiscountId()), discount.getId()));
+                resultList.add(new UseableDiscountDTO(discountDao.getById(discount.getDiscountId()), discount.getId()));
             }
         }
         return resultList;

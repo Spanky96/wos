@@ -113,7 +113,7 @@ public class UserController extends BaseController {
             snsUserInfo.setCity("无锡");
             snsUserInfo.setCountry("中国");
             snsUserInfo.setHeadImgUrl(
-                    "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2027227285,647776538&fm=58&s=D0B6047294A7E11114DFC0CD0200F0EA&bpow=121&bpoh=75");
+                    "http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83equNEXayYjYkuTB6eP5Mfs6O2sw3a1A4MhtbNia6gCicCSQkoHjnICJrlWN4SYqtB9KC5wgKVD3eZJg/132");
             snsUserInfo.setNickname("Spanky Yym");
             snsUserInfo.setOpenId("testopenId");
             snsUserInfo.setProvince("江苏");
@@ -190,6 +190,21 @@ public class UserController extends BaseController {
         if (result) {
             modelMap.put("result", SUCCESS);
             modelMap.put("user", user);
+        } else {
+            modelMap.put("result", FAIL);
+        }
+        return modelMap;
+    }
+
+    @RequestMapping(value = "/user/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelMap doUpdate(@RequestBody String userStr) {
+        JSONObject obj = JSONObject.fromObject(userStr);
+        User user = (User) JSONObject.toBean(obj, User.class);
+        ModelMap modelMap = new ModelMap();
+        boolean result = userService.updateWxUser(user);
+        if (result) {
+            modelMap.put("result", SUCCESS);
         } else {
             modelMap.put("result", FAIL);
         }
