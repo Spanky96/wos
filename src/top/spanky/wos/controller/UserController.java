@@ -1,6 +1,12 @@
 package top.spanky.wos.controller;
 
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.sf.json.JSONObject;
 import top.spanky.wos.Constants;
+import top.spanky.wos.controller.pojo.UserOrderDTO;
 import top.spanky.wos.model.User;
+import top.spanky.wos.service.OrderService;
 import top.spanky.wos.service.UserService;
 import top.spanky.wos.util.PropertyUtil;
 import top.spanky.wos.util.StringUtil;
@@ -37,6 +45,8 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping(value = "/dev", method = RequestMethod.GET)
     @ResponseBody
@@ -46,7 +56,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/dev", method = RequestMethod.POST)
     @ResponseBody
-    public String dev(HttpServletRequest request) {
+    public String dev(HttpServletRequest request) throws UnsupportedEncodingException {
         Map<String, String> requestMap = null;
         try {
             requestMap = MessageUtil.parseXml(request);
@@ -56,8 +66,9 @@ public class UserController extends BaseController {
             return null;
         }
 
+        logger.info("-----------------------------------------------------------------------------------------------------------");
         for (String key : requestMap.keySet()) {
-            System.out.println(key + requestMap.get(key));
+            logger.info("key: " + key + "\tvalue: " + requestMap.get(key));
         }
 
         TextMessage tm = new TextMessage();
@@ -65,7 +76,66 @@ public class UserController extends BaseController {
         tm.setCreateTime(new Date().getTime() / 1000);
         tm.setToUserName(requestMap.get("FromUserName"));
         tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
-        tm.setContent("http://bjcf.spanky.top:8080");
+        String str = "";
+        try {
+            if ("text".equals(requestMap.get("MsgType")) && "地址".equals(requestMap.get("Content"))) {
+                str = new String("http://bjcf.spanky.top/dist/index.html".getBytes(), "ISO8859_1");
+            } else if ("text".equals(requestMap.get("MsgType"))) {
+                str = new String("你说个'地址'试试?".getBytes(), "ISO8859_1");
+            } else if ("CLICK".equals(requestMap.get("Event")) && "NEW_ORDER".equals(requestMap.get("EventKey"))) {
+                String APPID = PropertyUtil.get("appid");
+                String SECRET = PropertyUtil.get("secret");
+                // 获取网页授权access_token
+                WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, "1");
+                if (weixinOauth2Token == null) {
+                    logger.info("获取失败");
+                    return null;
+                }
+                // 网页授权接口访问凭证
+                String accessToken = weixinOauth2Token.getAccessToken();
+                // 用户标识
+                String openId = weixinOauth2Token.getOpenId();
+                // TODO: 发送模板消息
+                String templateId = "kA9C7y2a8S1yS-4Cc0t9OWb_Eme1NYxlfRNuq25e5_0";
+                User user = userService.getByOpenid(openId);
+                JSONObject data = new JSONObject();
+                JSONObject obj = new JSONObject();
+                int orderId = 8;
+
+                List<UserOrderDTO> userOrders = orderService.getAllByUserId(user.getId());
+
+                ModelMap modelMap = new ModelMap();
+                for (UserOrderDTO order : userOrders) {
+                    if (orderId == order.getOrderId()) {
+                        modelMap.put("order", order);
+                        break;
+                    }
+                }
+                data.put("title", "title");
+                data.put("id", "id");
+                data.put("name", "name");
+                data.put("phone", "phone");
+                data.put("address", "address");
+                data.put("remark", "remark");
+                data.put("cartList", "cartList");
+                data.put("foodPrice", "foodPrice");
+                data.put("deliveryPrice", "deleveryPrice");
+                data.put("discountPrice", "discountPrice");
+                data.put("finalPrice", "finalPrice");
+                data.put("subTitle", "subTitle");
+
+                obj.put("touser", requestMap.get("FromUserName"));
+                obj.put("template_id", templateId);
+                obj.put("data", data);
+                AdvancedUtil.sendTemplateMessage(accessToken, obj.toString());
+                return null;
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.error(e.getMessage());
+        }
+        tm.setContent(str);
+        logger.info("return: " + new String(tm.getContent().getBytes("ISO8859_1"),"UTF-8"));
+        logger.info("-----------------------------------------------------------------------------------------------------------");
         return MessageUtil.messageToXml(tm);
     }
 

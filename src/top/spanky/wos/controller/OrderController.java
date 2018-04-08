@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.sf.json.JSONObject;
 import top.spanky.wos.Constants;
+import top.spanky.wos.controller.pojo.UserOrderDTO;
 import top.spanky.wos.controller.resource.CartList;
 import top.spanky.wos.controller.resource.OrderResource;
 import top.spanky.wos.exception.ServiceException;
@@ -38,6 +39,22 @@ public class OrderController extends BaseController {
         List userOrders = orderService.getAllByUserId(userId);
         modelMap.put("orders", userOrders);
         modelMap.put("result", SUCCESS);
+        return modelMap;
+    }
+    
+    @RequestMapping(value = "/order/{userId}/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelMap getOrderById(@PathVariable int userId,
+                                 @PathVariable int orderId) {
+        ModelMap modelMap = new ModelMap();
+        List<UserOrderDTO> userOrders = orderService.getAllByUserId(userId);
+        
+        for (UserOrderDTO order : userOrders) {
+            if (orderId == order.getOrderId()) {
+                modelMap.put("order", order);
+            }
+        }
+        
         return modelMap;
     }
 
