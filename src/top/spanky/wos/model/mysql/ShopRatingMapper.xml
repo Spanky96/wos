@@ -12,6 +12,7 @@
          <result column="text" property="text"/>
          <result column="time" property="rateTime"/>
          <result column="type" property="rateType"/>
+         <result column="order_id" property="orderId"/>
     </resultMap>
 
     <resultMap type="ShopRating" id="shopRatingWithAcatar" extends="basicShopRatingMap">
@@ -30,5 +31,18 @@
             SELECT * FROM shop_ratings as a left join users as b ON a.user_id = b.id WHERE a.user_id = #{id};
         ]]>
     </select>
+    
+    <select id="getByOrderId" parameterType="int" resultMap="basicShopRatingMap">
+        <![CDATA[
+            SELECT * FROM shop_ratings where order_id = #{orderId};
+        ]]>
+    </select>
+    
+    <insert id="add" parameterType="ShopRating">
+        <![CDATA[
+        INSERT INTO `shop_ratings` (time, user_id, order_id, score1, score2, text, type, delivery_time)
+         VALUES (NOW(), #{userId}, #{orderId}, #{score1}, #{score2}, #{text}, #{rateType}, #{diliveryTime})
+        ]]>
+    </insert>
 
 </mapper>

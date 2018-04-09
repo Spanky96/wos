@@ -7,7 +7,7 @@ public class BasicRating extends DisplayInfo {
     private Integer userId;
     private String text;
     private Timestamp rateTime;
-    private Integer rateType; // 1: 好评 0:差评
+    private Integer rateType; // 0: 好评 1:差评
 
     public Integer getId() {
         return id;

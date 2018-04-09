@@ -13,15 +13,21 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
     
-    <select id="getAllByUserId" resultMap="AddressMap" parameterType="int">
+    <select id="getById" resultMap="AddressMap" parameterType="int">
         <![CDATA[
-            SELECT * FROM address where user_id = #{userId};
+            SELECT * FROM address where id = #{id};
         ]]>
     </select>
     
-    <delete id="deleteById" parameterType="int">
-        DELETE from address where id = #{id}
-    </delete>
+    <select id="getAllByUserId" resultMap="AddressMap" parameterType="int">
+        <![CDATA[
+            SELECT * FROM address where user_id = #{userId} AND is_deleted = 0;
+        ]]>
+    </select>
+    
+    <update id="deleteById" parameterType="int">
+        UPDATE address SET is_deleted = 1 WHERE id = #{id};
+    </update>
     
     <update id="update" parameterType="Address">
        <![CDATA[

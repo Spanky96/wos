@@ -19,4 +19,14 @@ public class ShopRatingDaoImpl extends SqlSessionDaoSupport implements ShopRatin
         return getSqlSession().selectList(CLASS_NAME + ".getShopRatingsByUserId", userId);
     }
 
+    @Override
+    public ShopRating getByOrderId(int orderId) {
+        return getSqlSession().selectOne(CLASS_NAME + ".getByOrderId", orderId);
+    }
+
+    @Override
+    public boolean add(ShopRating shopRating) {
+        return getSqlSession().insert(CLASS_NAME + ".add", shopRating) > 0 ? true : false;
+    }
+
 }

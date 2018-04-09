@@ -6,11 +6,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import top.spanky.wos.service.AddressService;
+import net.sf.json.JSONObject;
+import top.spanky.wos.controller.resource.OrderResource;
+import top.spanky.wos.json.MyJsonService;
+import top.spanky.wos.service.DiscountService;
+import top.spanky.wos.service.DistributorService;
+import top.spanky.wos.service.OrderService;
+import top.spanky.wos.service.UserDiscountService;
 
 public class SpringUtil implements ApplicationContextAware {
 
-    private static final String Food = null;
     private static ApplicationContext applicationContext = null;
 
     @Override
@@ -28,38 +33,61 @@ public class SpringUtil implements ApplicationContextAware {
         return applicationContext.getBean(beanId);
     }
 
+    @Test
+    public void discountTest() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        DiscountService ds = (DiscountService)ac.getBean("discountService");
+    }
 
     @Test
-    public void test1() {
+    public void distributorTest() {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        AddressService us = (AddressService) ac.getBean("addressService");
+        DistributorService ds = (DistributorService) ac.getBean("distributorService");
+    }
 
-        // List<Food> allFoods = us.getAllFoods();
-        //
-        // FoodResource resource = new FoodResource(allFoods);
+    @Test
+    public void userDiscountTest() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserDiscountService ds = (UserDiscountService) ac.getBean("userDiscountService");
+    }
 
-        // System.out.println(resource.getFoods());
-        // System.out.println(JSONArray.fromObject(resource));
+    @Test
+    public void OrderTest() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        OrderService ds = (OrderService) ac.getBean("orderService");
+    }
 
-        // System.out.println(us.getFoodById(1));
-        // System.out.println(us.getFoodById(3));
-        // ShopRatingService us = (ShopRatingService) ac.getBean("shopRatingService");
-        //
-        // System.out.println(JSONObject.fromObject(us.getAllShopRatings().get(0)));
-        //
-        // System.out.println(JSONObject.fromObject(us.getShopRatingsByUserId(1).get(0)));
+    @Test
+    public void TestOrderSource1() {
+        String resource = "{\n" + "    \"temp\": true,\n" + "    \"totalPrice\": 1.12,\n"
+                + "    \"deliveryPrice\": 0.04,\n" + "    \"finalPrice\": 1.16,\n" + "    \"cartList\": [\n"
+                + "            {\"id\": 1, \"number\": 4},\n" + "            {\"id\": 2, \"number\": 1}\n"
+                + "        ],\n" + "    \"address\": {\n" + "                \"name\": \"仰一鸣\",\n"
+                + "                \"gender\": 1,\n" + "                \"phone\": \"18795950631\",\n"
+                + "                \"address\": \"大河\"\n" + "    }\n" + "    \n" + "}";
+        JSONObject job = JSONObject.fromObject(resource);
+        OrderResource bean = (OrderResource) JSONObject.toBean(job, OrderResource.class);
+        System.out.println(bean);
 
-        // List<Address> addressList = us.getAllAddressByUserId(5);
-        // System.out.println(JSONArray.fromObject(addressList,
-        // MyJsonConfig.getMyJsonConfig()));
-        //
-        // Address add = addressList.get(0);
-        // add.setGender(2);
-        // add.setName("xwewe");
-        // System.out.println(add.getId());
-        // System.out.println(us.add(add));
-        // System.out.println(add.getId());
+    }
 
+    @Test
+    public void TestOrderSource2() {
+        String resource = "{\n" + "    \"temp\": false,\n" + "    \"userId\": 1,\n" + "    \"discountId\": 1,\n"
+                + "    \"disPrice\": 0.00, \n" + "    \"totalPrice\": 1.12,\n" + "    \"deliveryPrice\": 0.04,\n"
+                + "    \"finalPrice\": 1.16,\n" + "    \"cartList\": [\n" + "            {\"id\": 1, \"number\": 4},\n"
+                + "            {\"id\": 2, \"number\": 1}\n" + "        ]\n" + "}";
+        JSONObject job = JSONObject.fromObject(resource);
+        OrderResource bean = (OrderResource) JSONObject.toBean(job, OrderResource.class);
+        System.out.println(bean);
+
+    }
+
+    @Test
+    public void TestMath() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        MyJsonService js = (MyJsonService)SpringUtil.getBean("myJsonService");
+        System.out.println(((JSONObject) js.getShopBasicInfo().get("seller")).get("bulletin"));
 
     }
 }

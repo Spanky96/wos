@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.Order">
+
+    <resultMap type="Order" id="OrderMapper">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="food_list" property="foodList"/>
+        <result column="address_id" property="addressId"/>
+        <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
+        <result column="food_price" property="foodPrice"/>
+        <result column="delivery_price" property="deliveryPrice"/>
+        <result column="discount_price" property="discountPrice"/>
+        <result column="final_price" property="finalPrice"/>
+        <result column="discount_id" property="discountId"/>
+        <result column="distributor_id" property="distributorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <select id="getAll" resultMap="OrderMapper" parameterType="int">
+        <![CDATA[
+            SELECT * FROM `order` ORDER BY id DESC;
+        ]]>
+    </select>
+    
+    <select id="getAllByUserId" resultMap="OrderMapper" parameterType="int">
+        <![CDATA[
+            SELECT * FROM `order` where user_id = #{userId} ORDER BY id DESC;
+        ]]>
+    </select>
+    
+    <select id="getByID" resultMap="OrderMapper" parameterType="int">
+        <![CDATA[
+            SELECT * FROM `order` where id = #{id} ORDER BY id DESC;
+        ]]>
+    </select>
+
+    <update id="update" parameterType="Order">
+       <![CDATA[
+            UPDATE `order` 
+            SET 
+                status = #{status},
+                distributor_id = #{distributorId},
+                update_time = NOW()
+            WHERE 
+                id = #{id}
+        ]]>
+    </update>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Address">
+        <![CDATA[
+        INSERT INTO `order` 
+        (user_id, food_list, address_id, remark, status, food_price, delivery_price, discount_price, final_price, discount_id, create_time, update_time)
+         VALUES (#{userId}, #{foodList}, #{addressId}, #{remark}, 0, #{foodPrice}, #{deliveryPrice}, #{discountPrice},#{finalPrice},#{discountId},NOW(), NOW())
+        ]]>
+    </insert>
+
+</mapper>

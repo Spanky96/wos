@@ -11,4 +11,6 @@ public interface UserService {
     public User getByOpenid(String openid);
 
     public boolean addUserByWX(User user);
+
+    public boolean updateWxUser(User user);
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.OrderHistory">
+
+    <resultMap type="OrderHistory" id="OrderHistoryMapper">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="time" property="time"/>
+        <result column="type" property="type"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+    
+    <select id="getAllByOrderId" resultMap="OrderHistoryMapper" parameterType="int">
+        <![CDATA[
+            SELECT * FROM `order_history` WHERE order_id = #{orderId};
+        ]]>
+    </select>
+
+    <select id="getByID" resultMap="OrderHistoryMapper" parameterType="int">
+        <![CDATA[
+            SELECT * FROM `order_history` where id = #{id};
+        ]]>
+    </select>
+
+    <update id="update" parameterType="OrderHistory">
+       <![CDATA[
+            UPDATE `order_history` 
+            SET 
+                order_id = #{orderId},
+                phone = #{phone},
+                type = #{type},
+                time = NOW()
+            WHERE 
+                id = #{id}
+        ]]>
+    </update>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="OrderHistory">
+        <![CDATA[
+        INSERT INTO `order_history` (time, type, order_id, phone) VALUES (NOW(), #{type}, #{orderId}, #{phone})
+        ]]>
+    </insert>
+
+</mapper>
