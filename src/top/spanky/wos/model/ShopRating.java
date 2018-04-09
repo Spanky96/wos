@@ -4,6 +4,7 @@ public class ShopRating extends BasicRating {
     private Double score1;
     private Double score2;
     private Integer diliveryTime;
+    private Integer orderId;
 
     public Double getScore1() {
         return score1;
@@ -28,12 +29,12 @@ public class ShopRating extends BasicRating {
         this.diliveryTime = diliveryTime;
     }
 
-    @Override
-    public String toString() {
-        return "ShopRating [score1=" + score1 + ", score2=" + score2 + ", diliveryTime=" + diliveryTime + ", getId()="
-                + getId() + ", getUserId()=" + getUserId() + ", getText()=" + getText() + ", getRateTime()="
-                + getRateTime() + ", getRateType()=" + getRateType() + ", getAvatar()=" + getAvatar()
-                + ", getDisplayStr()=" + getDisplayStr() + ", getClass()=" + getClass() + "]";
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
 }

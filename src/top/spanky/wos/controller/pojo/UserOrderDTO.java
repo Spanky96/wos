@@ -18,6 +18,8 @@ public class UserOrderDTO {
     private Distributor distributor;
     private List<CartListDTO> cartList;
     private long createTime;
+    private OrderShopRatingDto rate;
+
     public int getOrderId() {
         return orderId;
     }
@@ -85,12 +87,13 @@ public class UserOrderDTO {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "UserOrderDTO [orderId=" + orderId + ", address=" + address + ", status=" + status + ", discount="
-                + discount + ", foodPrice=" + foodPrice + ", discountPrice=" + discountPrice + ", deliveryPrice="
-                + deliveryPrice + ", finalPrice=" + finalPrice + ", distributor=" + distributor + ", cartList="
-                + cartList + ", createTime=" + createTime + "]";
+    public OrderShopRatingDto getRate() {
+        return rate;
     }
+
+    public void setRate(OrderShopRatingDto rate) {
+        this.rate = rate;
+    }
+
 
 }

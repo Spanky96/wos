@@ -5,20 +5,27 @@ import java.util.List;
 
 import top.spanky.wos.Constants;
 import top.spanky.wos.controller.pojo.CartListDTO;
+import top.spanky.wos.controller.pojo.OrderShopRatingDto;
 import top.spanky.wos.controller.pojo.UserOrderDTO;
 import top.spanky.wos.controller.resource.CartList;
+import top.spanky.wos.controller.resource.OrderRateSource;
 import top.spanky.wos.controller.resource.OrderResource;
 import top.spanky.wos.dao.AddressDao;
 import top.spanky.wos.dao.DiscountDao;
 import top.spanky.wos.dao.DistributorDao;
 import top.spanky.wos.dao.FoodDao;
 import top.spanky.wos.dao.OrderDao;
+import top.spanky.wos.dao.OrderHistoryDao;
+import top.spanky.wos.dao.ShopRatingDao;
 import top.spanky.wos.dao.UserDiscountDao;
 import top.spanky.wos.exception.ServiceException;
 import top.spanky.wos.json.MyJsonService;
 import top.spanky.wos.model.Discount;
 import top.spanky.wos.model.Food;
 import top.spanky.wos.model.Order;
+import top.spanky.wos.model.OrderHistory;
+import top.spanky.wos.model.OrderStatus;
+import top.spanky.wos.model.ShopRating;
 import top.spanky.wos.model.UserDiscount;
 import top.spanky.wos.service.OrderService;
 import top.spanky.wos.util.CommonUtil;
@@ -26,12 +33,18 @@ import top.spanky.wos.util.CommonUtil;
 public class OrderServiceImpl implements OrderService {
 
     private OrderDao orderDao;
+    private OrderHistoryDao orderHistoryDao;
     private AddressDao addressDao;
     private FoodDao foodDao;
     private DistributorDao distributorDao;
     private DiscountDao discountDao;
     private UserDiscountDao userDiscountDao;
     private MyJsonService myJsonService;
+    private ShopRatingDao shopRatingDao;
+
+    public void setShopRatingDao(ShopRatingDao shopRatingDao) {
+        this.shopRatingDao = shopRatingDao;
+    }
 
     public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;
@@ -61,6 +74,10 @@ public class OrderServiceImpl implements OrderService {
         this.myJsonService = myJsonService;
     }
 
+    public void setOrderHistoryDao(OrderHistoryDao orderHistoryDao) {
+        this.orderHistoryDao = orderHistoryDao;
+    }
+
     @Override
     public List getAll() {
         return orderDao.getAll();
@@ -87,6 +104,9 @@ public class OrderServiceImpl implements OrderService {
             }
             ur.setFoodPrice(order.getFoodPrice());
             ur.setStatus(order.getStatus());
+            if (order.getStatus() >= OrderStatus.YPJ.getIndex()) {
+                ur.setRate(new OrderShopRatingDto(shopRatingDao.getByOrderId(order.getId())));
+            }
             userOrders.add(ur);
         }
         return userOrders;
@@ -217,8 +237,41 @@ public class OrderServiceImpl implements OrderService {
             order.setUserId(or.getUserId());
             order.setAddressId(or.getAddressId());
         }
+        // 增加order、orderHistroy
 
-        return orderDao.add(order) ? order : null;
+        if (orderDao.add(order)) {
+            orderHistoryDao.add(new OrderHistory(order.getId(), OrderHistory.PAY_SUCCESS, null));
+        }
+        return order;
+    }
+
+    @Override
+    public boolean addRate(OrderRateSource or) throws ServiceException {
+        Order order = orderDao.getByID(or.getOrderId());
+        if (or.getUserId() != order.getUserId())
+            throw new ServiceException(2003);
+        // 增加评价信息
+        ShopRating rate = new ShopRating();
+        rate.setScore1(or.getScore1());
+        rate.setScore2(or.getScore2());
+        rate.setText(or.getText());
+        rate.setRateType(or.getType());
+        rate.setDiliveryTime(order.getDiliveryTime());
+        rate.setUserId(or.getUserId());
+        rate.setOrderId(order.getId());
+        shopRatingDao.add(rate);
+
+        // 修改订单状态
+        order.setStatus(OrderStatus.YPJ.getIndex());
+        orderDao.update(order);
+
+        // 增加订单历史
+        OrderHistory oh = new OrderHistory();
+        oh.setOrderId(order.getId());
+        oh.setType(OrderHistory.RATED);
+        orderHistoryDao.add(oh);
+
+        return true;
     }
 
 }

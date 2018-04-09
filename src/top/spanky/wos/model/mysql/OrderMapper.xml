@@ -15,7 +15,7 @@
         <result column="discount_price" property="discountPrice"/>
         <result column="final_price" property="finalPrice"/>
         <result column="discount_id" property="discountId"/>
-        <result column="distributor_id" property="finalPrice"/>
+        <result column="distributor_id" property="distributorId"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -54,7 +54,7 @@
         <![CDATA[
         INSERT INTO `order` 
         (user_id, food_list, address_id, remark, status, food_price, delivery_price, discount_price, final_price, discount_id, create_time, update_time)
-         VALUES (#{userId}, #{foodList}, #{addressId}, #{remark}, 1, #{foodPrice}, #{deliveryPrice}, #{discountPrice},#{finalPrice},#{discountId},NOW(), NOW())
+         VALUES (#{userId}, #{foodList}, #{addressId}, #{remark}, 0, #{foodPrice}, #{deliveryPrice}, #{discountPrice},#{finalPrice},#{discountId},NOW(), NOW())
         ]]>
     </insert>
 

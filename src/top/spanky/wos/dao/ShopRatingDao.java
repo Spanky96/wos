@@ -9,4 +9,8 @@ public interface ShopRatingDao {
     public List<ShopRating> getAllShopRatings();
 
     public List<ShopRating> getShopRatingsByUserId(int userId);
+
+    public ShopRating getByOrderId(int orderId);
+
+    public boolean add(ShopRating shopRating);
 }

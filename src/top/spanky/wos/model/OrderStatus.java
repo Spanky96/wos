@@ -2,7 +2,7 @@ package top.spanky.wos.model;
 
 public enum OrderStatus {
 
-    YFK("已付款", 1), MJYJD("卖家已接单", 2), ZZPS("正在配送", 3), YSD("已送达", 4), YPJ("已评价", 5), SFHP("双方互评", 6), YGB("已关闭", 0);
+    YFK("已付款", 0), GB("订单被关闭", 1), SJYJD("商家已接单", 2), ZZPS("正在配送", 3), YSD("已送达", 4), DDWC("订单完成", 5), YPJ("已评价", 6);
 
     private int index;
     private String name;

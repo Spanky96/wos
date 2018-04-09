@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import net.sf.json.JSONObject;
 import top.spanky.wos.controller.resource.OrderResource;
+import top.spanky.wos.json.MyJsonService;
 import top.spanky.wos.service.DiscountService;
 import top.spanky.wos.service.DistributorService;
 import top.spanky.wos.service.OrderService;
@@ -84,7 +85,9 @@ public class SpringUtil implements ApplicationContextAware {
 
     @Test
     public void TestMath() {
-        System.out.println(Math.round((Math.random() * 45) + 1) / 100.0); // [0,1)
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        MyJsonService js = (MyJsonService)SpringUtil.getBean("myJsonService");
+        System.out.println(((JSONObject) js.getShopBasicInfo().get("seller")).get("bulletin"));
 
     }
 }

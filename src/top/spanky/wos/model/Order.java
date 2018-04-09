@@ -15,6 +15,7 @@ public class Order {
     private Double finalPrice;
     private Integer discountId;
     private Integer distributorId;
+    private Integer diliveryTime;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -112,6 +113,14 @@ public class Order {
 
     public void setDistributorId(Integer distributorId) {
         this.distributorId = distributorId;
+    }
+
+    public Integer getDiliveryTime() {
+        return diliveryTime;
+    }
+
+    public void setDisliveryTime(Integer diliveryTime) {
+        this.diliveryTime = diliveryTime;
     }
 
     public Timestamp getCreateTime() {

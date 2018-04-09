@@ -60,7 +60,8 @@
     <bean id="distributorDao" class="top.spanky.wos.dao.mybatis.DistributorDaoImpl" parent="baseDao" />
     <bean id="userDiscountDao" class="top.spanky.wos.dao.mybatis.UserDiscountDaoImpl" parent="baseDao" />
     <bean id="orderDao" class="top.spanky.wos.dao.mybatis.OrderDaoImpl" parent="baseDao" />
-    
+    <bean id="orderHistoryDao" class="top.spanky.wos.dao.mybatis.OrderHistoryDaoImpl" parent="baseDao" />
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"></property>
     </bean>
@@ -84,11 +85,11 @@
     <bean id="userService" class="top.spanky.wos.service.impl.UserServiceImpl" scope="singleton">
       <property name="userDao" ref="userDao" />
     </bean>
-    
+
     <bean id="foodService" class="top.spanky.wos.service.impl.FoodServiceImpl" scope="singleton">
       <property name="foodDao" ref="foodDao" />
     </bean>
-    
+
     <bean id="foodRatingService" class="top.spanky.wos.service.impl.FoodRatingServiceImpl" scope="singleton">
       <property name="foodRatingDao" ref="foodRatingDao" />
     </bean>
@@ -96,36 +97,42 @@
     <bean id="shopRatingService" class="top.spanky.wos.service.impl.ShopRatingServiceImpl" scope="singleton">
       <property name="shopRatingDao" ref="shopRatingDao" />
     </bean>
-    
+
     <bean id="addressService" class="top.spanky.wos.service.impl.AddressServiceImpl" scope="singleton">
       <property name="addressDao" ref="addressDao" />
     </bean>
-    
+
     <bean id="discountService" class="top.spanky.wos.service.impl.DiscountServiceImpl" scope="singleton">
       <property name="discountDao" ref="discountDao" />
     </bean>
-    
+
     <bean id="distributorService" class="top.spanky.wos.service.impl.DistributorServiceImpl" scope="singleton">
       <property name="distributorDao" ref="distributorDao" />
     </bean>
-    
+
+    <bean id="orderHistoryService" class="top.spanky.wos.service.impl.OrderHistoryServiceImpl" scope="singleton">
+      <property name="orderHistoryDao" ref="orderHistoryDao" />
+    </bean>
+
     <bean id="userDiscountService" class="top.spanky.wos.service.impl.UserDiscountServiceImpl" scope="singleton">
       <property name="userDiscountDao" ref="userDiscountDao" />
       <property name="discountDao" ref="discountDao" />
     </bean>
-    
+
     <bean id="orderService" class="top.spanky.wos.service.impl.OrderServiceImpl" scope="singleton">
       <property name="orderDao" ref="orderDao" />
+      <property name="orderHistoryDao" ref="orderHistoryDao" />
       <property name="foodDao" ref="foodDao" />
       <property name="addressDao" ref="addressDao" />
       <property name="distributorDao" ref="distributorDao" />
       <property name="userDiscountDao" ref="userDiscountDao" />
       <property name="discountDao" ref="discountDao" />
       <property name="myJsonService" ref="myJsonService" />
+      <property name="shopRatingDao" ref="shopRatingDao" />
     </bean>
 
     <bean id="myJsonService" class="top.spanky.wos.json.MyJsonService" scope="singleton" />
-  
+
     <bean class="top.spanky.wos.util.SpringUtil"></bean>
     
 </beans>
