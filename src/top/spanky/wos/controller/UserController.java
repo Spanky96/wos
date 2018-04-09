@@ -1,9 +1,11 @@
 package top.spanky.wos.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,21 +49,19 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/dev", method = RequestMethod.POST)
-    @ResponseBody
-    public String dev(HttpServletRequest request) {
+    public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String> requestMap = null;
         try {
             requestMap = MessageUtil.parseXml(request);
         } catch (Exception e) {
             logger.error("valid request");
             e.printStackTrace();
-            return null;
         }
 
         for (String key : requestMap.keySet()) {
             System.out.println(key + "\t" + requestMap.get(key));
         }
-        return doReply(requestMap);
+        response.getWriter().print(doReply(requestMap));
     }
 
     private String doReply(Map<String, String> requestMap) {
