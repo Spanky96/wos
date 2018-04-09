@@ -139,11 +139,8 @@ public class UserController extends BaseController {
             modelMap.put("redirect", FAIL.getMessage());
             return modelMap;
         }
-        // 网页授权接口访问凭证
         String accessToken = weixinOauth2Token.getAccessToken();
-        // 用户标识
         String openId = weixinOauth2Token.getOpenId();
-        // 获取用户信息
         SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
         System.out.println(snsUserInfo);
         User user = userService.getByOpenid(snsUserInfo.getOpenId());
