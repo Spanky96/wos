@@ -21,8 +21,4 @@ public class DisplayInfo {
         this.displayStr = displayStr;
     }
 
-    @Override
-    public String toString() {
-        return "DisplayInfo [avatar=" + avatar + ", displayStr=" + displayStr + "]";
-    }
 }

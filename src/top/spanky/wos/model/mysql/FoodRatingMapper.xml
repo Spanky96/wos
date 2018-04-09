@@ -8,8 +8,8 @@
          <result column="food_id" property="foodId"/>
          <result column="user_id" property="userId"/>
          <result column="text" property="text"/>
-         <result column="time" property="time"/>
-         <result column="type" property="type"/>
+         <result column="time" property="rateTime"/>
+         <result column="type" property="rateType"/>
     </resultMap>
 
     <resultMap type="FoodRating" id="foodRatingOnFoodMap" extends="basicFoodRatingMap">

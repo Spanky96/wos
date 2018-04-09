@@ -65,7 +65,7 @@ public class UserController extends BaseController {
         tm.setCreateTime(new Date().getTime() / 1000);
         tm.setToUserName(requestMap.get("FromUserName"));
         tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
-        tm.setContent("http://bjcf.spanky.top:8080");
+        tm.setContent("Hello..");
         return MessageUtil.messageToXml(tm);
     }
 
@@ -122,6 +122,8 @@ public class UserController extends BaseController {
             if ("1".equals(code)) {
                 modelMap.put("redirect", "register");
             } else {
+                User user = userService.getByOpenid("testopenId");
+                snsUserInfo.setUser(user);
                 modelMap.put("redirect", "sell");
             }
             return modelMap;
@@ -134,7 +136,8 @@ public class UserController extends BaseController {
         WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(APPID, SECRET, code);
         if (weixinOauth2Token == null) {
             logger.info("获取失败");
-            return null;
+            modelMap.put("redirect", FAIL.getMessage());
+            return modelMap;
         }
         // 网页授权接口访问凭证
         String accessToken = weixinOauth2Token.getAccessToken();
@@ -147,6 +150,7 @@ public class UserController extends BaseController {
         if (user == null) {
             modelMap.put("redirect", "register");
         } else {
+            snsUserInfo.setUser(user);
             modelMap.put("redirect", "sell");
         }
         // 设置要传递的参数
@@ -177,10 +181,11 @@ public class UserController extends BaseController {
         //// TEST CODE
         if ("testopenId".equals(user.getOpenid())) {
             modelMap.put("result", SUCCESS);
+            user.setId(5);
             modelMap.put("user", user);
             return modelMap;
         }
-        ////
+        //////
         boolean result = userService.addUserByWX(user);
         if (result) {
             modelMap.put("result", SUCCESS);
