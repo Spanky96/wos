@@ -32,4 +32,30 @@
         ]]>
     </select>
 
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Food">
+        <![CDATA[
+        INSERT INTO `foods` 
+        (type_id, name, info, description, price, old_price, left_count, sell_count, icon, image)
+         VALUES (#{foodType.index}, #{name}, #{info}, #{description}, #{price}, #{oldPrice}, #{leftCount}, 0, #{icon},#{image})
+        ]]>
+    </insert>
+    
+    <update id="update" parameterType="Food">
+       <![CDATA[
+            UPDATE `foods` 
+            SET 
+                type_id = #{foodType.index},
+                name = #{name},
+                info = #{info},
+                description = #{description},
+                price = #{price},
+                old_price = #{oldPrice},
+                left_count = #{leftCount},
+                icon = #{icon},
+                image = #{image}
+            WHERE 
+                id = #{id}
+        ]]>
+    </update>
+    
 </mapper>

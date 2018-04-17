@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:hdp="http://www.springframework.org/schema/hadoop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:websocket="http://www.springframework.org/schema/websocket" 
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
         http://www.springframework.org/schema/aop
@@ -14,7 +15,9 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-3.1.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd"
+        >
 
 
      <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -36,6 +39,16 @@
         <property name="acquireIncrement" value="3" />
         <property name="initialPoolSize" value="5"></property>
     </bean>
+
+
+    <bean id="websocket" class="top.spanky.wos.web.socket.WebsocketEndPoint"/>  
+      
+    <websocket:handlers>  
+        <websocket:mapping path="/websocket" handler="websocket"/>  
+        <websocket:handshake-interceptors>  
+        <bean class="top.spanky.wos.web.socket.HandshakeInterceptor"/>  
+        </websocket:handshake-interceptors>  
+    </websocket:handlers>  
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -61,6 +74,8 @@
     <bean id="userDiscountDao" class="top.spanky.wos.dao.mybatis.UserDiscountDaoImpl" parent="baseDao" />
     <bean id="orderDao" class="top.spanky.wos.dao.mybatis.OrderDaoImpl" parent="baseDao" />
     <bean id="orderHistoryDao" class="top.spanky.wos.dao.mybatis.OrderHistoryDaoImpl" parent="baseDao" />
+    <bean id="reportSellerDao" class="top.spanky.wos.dao.mybatis.ReportSellerDaoImpl" parent="baseDao" />
+    <bean id="reportFoodDao" class="top.spanky.wos.dao.mybatis.ReportFoodDaoImpl" parent="baseDao" />
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"></property>
@@ -71,6 +86,7 @@
             <tx:method name="add*" propagation="REQUIRED" read-only="false" />
             <tx:method name="update*" propagation="REQUIRED" read-only="false" />
             <tx:method name="save*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="do*" propagation="REQUIRED" read-only="false" />
             <tx:method name="*" propagation="SUPPORTS" read-only="true" />
         </tx:attributes>
     </tx:advice>
@@ -118,8 +134,15 @@
       <property name="userDiscountDao" ref="userDiscountDao" />
       <property name="discountDao" ref="discountDao" />
     </bean>
+    
+    <bean id="ReportService" class="top.spanky.wos.service.impl.ReportServiceImpl" scope="singleton">
+      <property name="reportSellerDao" ref="reportSellerDao" />
+      <property name="reportFoodDao" ref="reportFoodDao" />
+      <property name="foodDao" ref="foodDao" />
+    </bean>
 
     <bean id="orderService" class="top.spanky.wos.service.impl.OrderServiceImpl" scope="singleton">
+      <property name="userDao" ref="userDao" />
       <property name="orderDao" ref="orderDao" />
       <property name="orderHistoryDao" ref="orderHistoryDao" />
       <property name="foodDao" ref="foodDao" />
@@ -129,6 +152,7 @@
       <property name="discountDao" ref="discountDao" />
       <property name="myJsonService" ref="myJsonService" />
       <property name="shopRatingDao" ref="shopRatingDao" />
+      <property name="websocket" ref="websocket" />
     </bean>
 
     <bean id="myJsonService" class="top.spanky.wos.json.MyJsonService" scope="singleton" />

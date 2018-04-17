@@ -10,4 +10,6 @@ public interface UserDao {
     public boolean addByWX(User user);
 
     public boolean updateById(User user);
+
+    public User getById(int id);
 }

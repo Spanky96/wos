@@ -23,5 +23,14 @@ public class FoodDaoImpl extends SqlSessionDaoSupport implements FoodDao {
         return getSqlSession().selectList(CLASS_NAME + SQL_ID_FOOD_GET_ALL_FOOD);
     }
 
+    @Override
+    public boolean add(Food food) {
+        return getSqlSession().insert(CLASS_NAME + ".add", food) > 0 ? true : false;
+    }
+
+    @Override
+    public boolean edit(Food food) {
+        return getSqlSession().update(CLASS_NAME + ".update", food) > 0 ? true : false;
+    }
 
 }

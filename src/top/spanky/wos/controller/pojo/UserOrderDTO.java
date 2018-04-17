@@ -15,11 +15,19 @@ public class UserOrderDTO {
     private double discountPrice;
     private double deliveryPrice;
     private double finalPrice;
+    private String remark;
     private Distributor distributor;
     private List<CartListDTO> cartList;
     private long createTime;
     private OrderShopRatingDto rate;
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
     public int getOrderId() {
         return orderId;
     }

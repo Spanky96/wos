@@ -15,7 +15,7 @@ public class Order {
     private Double finalPrice;
     private Integer discountId;
     private Integer distributorId;
-    private Integer diliveryTime;
+    private Integer deliveryTime;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -115,12 +115,12 @@ public class Order {
         this.distributorId = distributorId;
     }
 
-    public Integer getDiliveryTime() {
-        return diliveryTime;
+    public Integer getDeliveryTime() {
+        return deliveryTime;
     }
 
-    public void setDisliveryTime(Integer diliveryTime) {
-        this.diliveryTime = diliveryTime;
+    public void setDeliveryTime(Integer deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     public Timestamp getCreateTime() {
@@ -137,15 +137,6 @@ public class Order {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Order [id=" + id + ", userId=" + userId + ", foodList=" + foodList + ", addressId=" + addressId
-                + ", remark=" + remark + ", status=" + status + ", foodPrice=" + foodPrice + ", deliveryPrice="
-                + deliveryPrice + ", discountPrice=" + discountPrice + ", finalPrice=" + finalPrice + ", discountId="
-                + discountId + ", distributorId=" + distributorId + ", createTime=" + createTime + ", updateTime="
-                + updateTime + "]";
     }
 
 }

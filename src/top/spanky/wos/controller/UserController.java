@@ -1,6 +1,7 @@
 package top.spanky.wos.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import top.spanky.wos.service.UserService;
 import top.spanky.wos.util.PropertyUtil;
 import top.spanky.wos.util.SpringUtil;
 import top.spanky.wos.util.StringUtil;
+import top.spanky.wos.web.socket.WebsocketEndPoint;
 import top.spanky.wx4j.message.resp.TextMessage;
 import top.spanky.wx4j.pojo.SNSUserInfo;
 import top.spanky.wx4j.pojo.WeixinOauth2Token;
@@ -86,7 +88,7 @@ public class UserController extends BaseController {
             tm.setContent("一个红包已悄悄送到。可以去个人中心查看。");
             tm.setContent("今天您已经领取过红包啦，别太贪心噢～");
         } else {
-            tm.setContent(TextMessage.defaultMessage[(int) (Math.random() * 6)]);
+            tm.setContent(TextMessage.defaultMessage[(int) (Math.random() * 5)]);
         }
         return MessageUtil.messageToXml(tm);
 
@@ -96,8 +98,14 @@ public class UserController extends BaseController {
         String eventType = requestMap.get("Event");
         if (StringUtil.isEmpty(eventType))
             return null;
-        if (eventType.toLowerCase().equals(MessageUtil.EVENT_TYPE_SCAN))
+        if (eventType.toLowerCase().equals(MessageUtil.EVENT_TYPE_SCAN)) {
+            String openid = requestMap.get("FromUserName");
+            if (Arrays.asList(Constants.ADMIN_OPENIDS).contains(openid)) {
+                WebsocketEndPoint websocket = (WebsocketEndPoint) SpringUtil.getBean("websocket");
+                websocket.sendBroadMessage(userService.getByOpenid(openid), "WosSeller", "login");
+            }
             return null;
+        }
 
         if (eventType.toLowerCase().equals(MessageUtil.EVENT_TYPE_CLICK)) {
             String eventKey = requestMap.get("EventKey");
@@ -172,15 +180,7 @@ public class UserController extends BaseController {
             // logger.info("非法访问或用户拒绝");
             // return null;
             //////
-            SNSUserInfo snsUserInfo = new SNSUserInfo();
-            snsUserInfo.setCity("无锡");
-            snsUserInfo.setCountry("中国");
-            snsUserInfo.setHeadImgUrl(
-                    "http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83equNEXayYjYkuTB6eP5Mfs6O2sw3a1A4MhtbNia6gCicCSQkoHjnICJrlWN4SYqtB9KC5wgKVD3eZJg/132");
-            snsUserInfo.setNickname("Spanky Yym");
-            snsUserInfo.setOpenId("testopenId");
-            snsUserInfo.setProvince("江苏");
-            snsUserInfo.setSex(1);
+            SNSUserInfo snsUserInfo = getMockTestUser();
             modelMap.put("snsUserInfo", snsUserInfo);
             if ("1".equals(code)) {
                 modelMap.put("redirect", "register");
@@ -279,6 +279,26 @@ public class UserController extends BaseController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setView(this.getRedirectView("content/question"));
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/mockLogin", method = RequestMethod.GET)
+    public String messageTest() {
+        WebsocketEndPoint websocket = (WebsocketEndPoint) SpringUtil.getBean("websocket");
+        websocket.sendBroadMessage(userService.getByOpenid("testopenId"), "WosSeller", "login");
+        return "msg send";
+    }
+
+    private SNSUserInfo getMockTestUser() {
+        SNSUserInfo snsUserInfo = new SNSUserInfo();
+        snsUserInfo.setCity("无锡");
+        snsUserInfo.setCountry("中国");
+        snsUserInfo.setHeadImgUrl(
+                "http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83equNEXayYjYkuTB6eP5Mfs6O2sw3a1A4MhtbNia6gCicCSQkoHjnICJrlWN4SYqtB9KC5wgKVD3eZJg/132");
+        snsUserInfo.setNickname("Spanky Yym");
+        snsUserInfo.setOpenId("testopenId");
+        snsUserInfo.setProvince("江苏");
+        snsUserInfo.setSex(1);
+        return snsUserInfo;
     }
 
 }

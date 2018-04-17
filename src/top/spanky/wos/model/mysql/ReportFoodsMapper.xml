@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.ReportSeller">
+
+    <resultMap type="ReportSeller" id="reportSellerMap">
+        <result column="discount_price" property="discountPrice" />
+        <result column="final_price" property="finalPrice" />
+        <result column="create_time" property="date" />
+    </resultMap>
+
+    <select id="getAll" resultMap="reportSellerMap">
+        <![CDATA[
+            select create_time, final_price, discount_price from `order` as o where o.status>=4;
+        ]]>
+    </select>
+
+</mapper>

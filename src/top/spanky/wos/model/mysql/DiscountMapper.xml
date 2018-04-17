@@ -23,6 +23,13 @@
            SELECT * FROM discounts WHERE id = #{id};
         ]]>
     </select>
+    
+     <select id="getByUserDiscountId" parameterType="int" resultMap="dicountMap">
+        <![CDATA[
+           SELECT * FROM discounts WHERE id = (SELECT discount_id FROM user_discount WHERE id = #{discountId});
+        ]]>
+    </select>
+    
 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Discount">
         <![CDATA[

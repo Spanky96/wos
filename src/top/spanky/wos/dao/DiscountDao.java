@@ -15,4 +15,6 @@ public interface DiscountDao {
     public boolean update(Discount discount);
 
     public boolean deleteById(int id);
+
+    public Discount getByUserDiscountId(int discountId);
 }

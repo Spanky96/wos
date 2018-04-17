@@ -24,4 +24,9 @@ public class FoodRatingServiceImpl implements FoodRatingService {
         return foodRatingDao.getFoodRatingsByUserId(userId);
     }
 
+    @Override
+    public List<FoodRating> getAllFoodRatings() {
+        return foodRatingDao.getAll();
+    }
+
 }

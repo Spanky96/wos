@@ -29,5 +29,4 @@ public enum FoodType {
         this.name = name;
     }
 
-
 }

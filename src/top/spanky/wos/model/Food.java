@@ -3,6 +3,14 @@ package top.spanky.wos.model;
 import java.util.List;
 
 public class Food {
+    @Override
+    public String toString() {
+        return "Food [id=" + id + ", foodType=" + foodType + ", name=" + name + ", description=" + description
+                + ", info=" + info + ", price=" + price + ", oldPrice=" + oldPrice + ", sellCount=" + sellCount
+                + ", leftCount=" + leftCount + ", icon=" + icon + ", image=" + image + ", foodRatings=" + foodRatings
+                + "]";
+    }
+
     private Integer id;
     private FoodType foodType;
     private String name;
@@ -116,14 +124,6 @@ public class Food {
 
     public void setFoodRatings(List<FoodRating> foodRatings) {
         this.foodRatings = foodRatings;
-    }
-
-    @Override
-    public String toString() {
-        return "Food [id=" + id + ", foodType=" + foodType + ", name=" + name + ", description=" + description
-                + ", info=" + info + ", price=" + price + ", oldPrice=" + oldPrice + ", sellCount=" + sellCount
-                + ", leftCount=" + leftCount + ", icon=" + icon + ", image=" + image + ", foodRatings=" + foodRatings
-                + "]";
     }
 
 }

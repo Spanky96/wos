@@ -13,4 +13,6 @@ public interface OrderHistoryDao {
     public boolean update(OrderHistory orderHistory);
 
     public boolean add(OrderHistory orderHistory);
+
+    public int getDeliveryTime(int orderId);
 }

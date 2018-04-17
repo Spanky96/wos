@@ -22,19 +22,19 @@
     
     <select id="getAll" resultMap="OrderMapper" parameterType="int">
         <![CDATA[
-            SELECT * FROM `order` ORDER BY id DESC;
+            SELECT * FROM `order` WHERE status != -1 ORDER BY id DESC;
         ]]>
     </select>
     
     <select id="getAllByUserId" resultMap="OrderMapper" parameterType="int">
         <![CDATA[
-            SELECT * FROM `order` where user_id = #{userId} ORDER BY id DESC;
+            SELECT * FROM `order` WHERE user_id = #{userId} AND status != -1 ORDER BY id DESC;
         ]]>
     </select>
     
     <select id="getByID" resultMap="OrderMapper" parameterType="int">
         <![CDATA[
-            SELECT * FROM `order` where id = #{id} ORDER BY id DESC;
+            SELECT * FROM `order` WHERE id = #{id} ORDER BY id DESC;
         ]]>
     </select>
 
@@ -44,13 +44,14 @@
             SET 
                 status = #{status},
                 distributor_id = #{distributorId},
+                delivery_time = #{deliveryTime},
                 update_time = NOW()
             WHERE 
                 id = #{id}
         ]]>
     </update>
 
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Address">
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Order">
         <![CDATA[
         INSERT INTO `order` 
         (user_id, food_list, address_id, remark, status, food_price, delivery_price, discount_price, final_price, discount_id, create_time, update_time)

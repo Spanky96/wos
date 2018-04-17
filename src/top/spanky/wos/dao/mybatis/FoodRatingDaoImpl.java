@@ -21,4 +21,9 @@ public class FoodRatingDaoImpl extends SqlSessionDaoSupport implements FoodRatin
         return getSqlSession().selectList(CLASS_NAME + ".getFoodRatingsByUserId", userId);
     }
 
+    @Override
+    public List<FoodRating> getAll() {
+        return getSqlSession().selectList(CLASS_NAME + ".getAll");
+    }
+
 }

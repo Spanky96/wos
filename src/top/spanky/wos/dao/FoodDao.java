@@ -8,4 +8,8 @@ public interface FoodDao {
     public Food getById(int id);
 
     public List getAll();
+
+    public boolean add(Food food);
+
+    public boolean edit(Food food);
 }

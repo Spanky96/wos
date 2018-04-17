@@ -25,4 +25,12 @@ public interface OrderService {
 
     public boolean addRate(OrderRateSource or) throws ServiceException;
 
+    public boolean updateStatus(int orderId, int id) throws ServiceException;
+
+    public void sendNewOrderMessage(int i);
+
+    public void doFinishOrder(int orderId) throws ServiceException;
+
+    public void doArrangeDelivery(int orderId, int distributorId) throws ServiceException;
+
 }

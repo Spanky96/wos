@@ -9,4 +9,6 @@ public interface FoodRatingDao {
     public List<FoodRating> getFoodRatingsByFoodId(int foodId);
 
     public List<FoodRating> getFoodRatingsByUserId(int userId);
+
+    public List<FoodRating> getAll();
 }

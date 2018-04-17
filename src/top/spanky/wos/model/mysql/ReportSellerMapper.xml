@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.spanky.wos.model.ReportFoods">
+
+    <resultMap type="ReportFoods" id="reportFoodsMap">
+        <result column="food_list" property="foodList" />
+        <result column="create_time" property="date" />
+    </resultMap>
+
+    <select id="getAll" resultMap="reportFoodsMap">
+        <![CDATA[
+            select food_list, create_time from`order` where status>=4;
+        ]]>
+    </select>
+
+</mapper>

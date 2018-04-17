@@ -16,6 +16,7 @@
          <result column="avatar" property="avatar"/>
          <result column="username" property="displayStr"/>
     </resultMap>
+
     
     <resultMap type="FoodRating" id="foodRatingOnUserMap" extends="basicFoodRatingMap">
          <result column="icon" property="avatar"/>
@@ -25,6 +26,12 @@
     <select id="getFoodRatingsByFoodId" parameterType="int" resultMap="foodRatingOnFoodMap">
         <![CDATA[
             SELECT * FROM food_ratings as a left join users as b ON a.user_id = b.id WHERE a.food_id = #{id};
+        ]]>
+    </select>
+    
+    <select id="getAll" resultMap="foodRatingOnFoodMap">
+        <![CDATA[
+            SELECT * FROM food_ratings as a left join users as b ON a.user_id = b.id;
         ]]>
     </select>
     

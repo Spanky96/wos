@@ -44,4 +44,15 @@ public class DiscountController extends BaseController {
         return map;
     }
 
+    @RequestMapping(value = "/discounts/all", method = RequestMethod.GET)
+    @ResponseBody
+    public List getAllDiscounts() {
+        return discountService.getAll();
+    }
+
+    @RequestMapping(value = "/discounts/delete/{discountId}", method = RequestMethod.GET)
+    public void deleteDiscount(@PathVariable int discountId) {
+        discountService.deleteById(discountId);
+    }
+
 }

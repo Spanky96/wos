@@ -1,16 +1,14 @@
 package top.spanky.wos.model;
 
-public enum OrderStatus {
-
-    YSC("已删除", -1), YFK("已付款", 0), GB("订单被关闭", 1), SJYJD("商家已接单", 2), ZZPS("正在配送", 3), YSD("已送达", 4), DDWC("订单完成",
-            5), YPJ("已评价", 6);
-
+public class IndexNameEntry {
     private int index;
     private String name;
 
-    private OrderStatus(String name, int index) {
-        this.name = name;
+    public IndexNameEntry() {
+    };
+    public IndexNameEntry(int index, String name) {
         this.index = index;
+        this.name = name;
     }
 
     public int getIndex() {
@@ -28,6 +26,4 @@ public enum OrderStatus {
     public void setName(String name) {
         this.name = name;
     }
-
-
 }

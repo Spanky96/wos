@@ -31,4 +31,9 @@ public class OrderHistoryDaoImpl extends SqlSessionDaoSupport implements OrderHi
         return getSqlSession().insert(CLASS_NAME + ".add", orderHistory) > 0 ? true : false;
     }
 
+    @Override
+    public int getDeliveryTime(int orderId) {
+        return getSqlSession().selectOne(CLASS_NAME + ".deliveryTime", orderId);
+    }
+
 }

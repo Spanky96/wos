@@ -16,11 +16,6 @@
     <error-code>403</error-code>
     <location>/static/refused.html</location>
   </error-page>
-  <!--  
-  <error-page>
-    <error-code>500</error-code>
-    <location>/static/500.html</location>
-  </error-page>-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:applicationContext.xml</param-value>

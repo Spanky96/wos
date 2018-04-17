@@ -5,6 +5,7 @@ import java.util.List;
 
 import top.spanky.wos.Constants;
 import top.spanky.wos.controller.pojo.CartListDTO;
+import top.spanky.wos.controller.pojo.OrderListDTO;
 import top.spanky.wos.controller.pojo.OrderShopRatingDto;
 import top.spanky.wos.controller.pojo.UserOrderDTO;
 import top.spanky.wos.controller.resource.CartList;
@@ -17,10 +18,12 @@ import top.spanky.wos.dao.FoodDao;
 import top.spanky.wos.dao.OrderDao;
 import top.spanky.wos.dao.OrderHistoryDao;
 import top.spanky.wos.dao.ShopRatingDao;
+import top.spanky.wos.dao.UserDao;
 import top.spanky.wos.dao.UserDiscountDao;
 import top.spanky.wos.exception.ServiceException;
 import top.spanky.wos.json.MyJsonService;
 import top.spanky.wos.model.Discount;
+import top.spanky.wos.model.Distributor;
 import top.spanky.wos.model.Food;
 import top.spanky.wos.model.Order;
 import top.spanky.wos.model.OrderHistory;
@@ -29,10 +32,12 @@ import top.spanky.wos.model.ShopRating;
 import top.spanky.wos.model.UserDiscount;
 import top.spanky.wos.service.OrderService;
 import top.spanky.wos.util.CommonUtil;
+import top.spanky.wos.web.socket.WebsocketEndPoint;
 
 public class OrderServiceImpl implements OrderService {
 
     private OrderDao orderDao;
+    private UserDao userDao;
     private OrderHistoryDao orderHistoryDao;
     private AddressDao addressDao;
     private FoodDao foodDao;
@@ -41,9 +46,18 @@ public class OrderServiceImpl implements OrderService {
     private UserDiscountDao userDiscountDao;
     private MyJsonService myJsonService;
     private ShopRatingDao shopRatingDao;
+    private WebsocketEndPoint websocket;
+
+    public void setWebsocket(WebsocketEndPoint websocket) {
+        this.websocket = websocket;
+    }
 
     public void setShopRatingDao(ShopRatingDao shopRatingDao) {
         this.shopRatingDao = shopRatingDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public void setOrderDao(OrderDao orderDao) {
@@ -80,7 +94,35 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List getAll() {
-        return orderDao.getAll();
+        List<Order> orderList = orderDao.getAll();
+        List<OrderListDTO> ol = new ArrayList<>();
+        for (Order order : orderList) {
+            OrderListDTO ur = new OrderListDTO();
+            if (order.getUserId() != null) {
+                ur.setUser(userDao.getById(order.getUserId()));
+            }
+            ur.setRemark(order.getRemark());
+            ur.setAddress(addressDao.getById(order.getAddressId()));
+            ur.setCartList(toCartList(order.getFoodList()));
+            ur.setCreateTime(order.getCreateTime().getTime());
+            ur.setDeliveryPrice(order.getDeliveryPrice());
+            ur.setFinalPrice(order.getFinalPrice());
+            ur.setOrderId(order.getId());
+            if (order.getDiscountId() != null) {
+                ur.setDiscount(discountDao.getByUserDiscountId(order.getDiscountId()));
+                ur.setDiscountPrice(order.getDiscountPrice());
+            }
+            if (order.getDistributorId() != null) {
+                ur.setDistributor(distributorDao.getById(order.getDistributorId()));
+            }
+            ur.setFoodPrice(order.getFoodPrice());
+            ur.setStatus(order.getStatus());
+            if (order.getStatus() >= OrderStatus.YPJ.getIndex()) {
+                ur.setRate(new OrderShopRatingDto(shopRatingDao.getByOrderId(order.getId())));
+            }
+            ol.add(ur);
+        }
+        return ol;
     }
 
     @Override
@@ -96,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
             ur.setFinalPrice(order.getFinalPrice());
             ur.setOrderId(order.getId());
             if (order.getDiscountId() != null) {
-                ur.setDiscount(discountDao.getById(order.getDiscountId()));
+                ur.setDiscount(discountDao.getByUserDiscountId(order.getDiscountId()));
                 ur.setDiscountPrice(order.getDiscountPrice());
             }
             if (order.getDistributorId() != null) {
@@ -105,7 +147,10 @@ public class OrderServiceImpl implements OrderService {
             ur.setFoodPrice(order.getFoodPrice());
             ur.setStatus(order.getStatus());
             if (order.getStatus() >= OrderStatus.YPJ.getIndex()) {
-                ur.setRate(new OrderShopRatingDto(shopRatingDao.getByOrderId(order.getId())));
+                ShopRating rate = shopRatingDao.getByOrderId(order.getId());
+                if (rate != null) {
+                    ur.setRate(new OrderShopRatingDto(rate));
+                }
             }
             userOrders.add(ur);
         }
@@ -147,7 +192,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean updateStatus(Order order, int id) {
         order.setStatus(id);
+        OrderHistory orderHistory = new OrderHistory(order.getId(), id, null);
+        orderHistoryDao.add(orderHistory);
         return orderDao.update(order);
+    }
+
+    @Override
+    public boolean updateStatus(int orderId, int id) throws ServiceException {
+        Order order = orderDao.getByID(orderId);
+        if (order == null)
+            throw new ServiceException(2002);
+
+        return updateStatus(order, id);
     }
 
     @Override
@@ -242,7 +298,42 @@ public class OrderServiceImpl implements OrderService {
         if (orderDao.add(order)) {
             orderHistoryDao.add(new OrderHistory(order.getId(), OrderHistory.PAY_SUCCESS, null));
         }
+
+        // 通知商家
+        if ((websocket.getSessionList() != null) && (websocket.getSessionList().size() > 0)) {
+            sendNewOrderMessage(order.getId());
+        }
+
         return order;
+    }
+
+    @Override
+    public void sendNewOrderMessage(int orderId) {
+        Order order = orderDao.getByID(orderId);
+        OrderListDTO ur = new OrderListDTO();
+        if (order.getUserId() != null) {
+            ur.setUser(userDao.getById(order.getUserId()));
+        }
+        ur.setRemark(order.getRemark());
+        ur.setAddress(addressDao.getById(order.getAddressId()));
+        ur.setCartList(toCartList(order.getFoodList()));
+        ur.setCreateTime(order.getCreateTime().getTime());
+        ur.setDeliveryPrice(order.getDeliveryPrice());
+        ur.setFinalPrice(order.getFinalPrice());
+        ur.setOrderId(order.getId());
+        if (order.getDiscountId() != null) {
+            ur.setDiscount(discountDao.getByUserDiscountId(order.getDiscountId()));
+            ur.setDiscountPrice(order.getDiscountPrice());
+        }
+        if (order.getDistributorId() != null) {
+            ur.setDistributor(distributorDao.getById(order.getDistributorId()));
+        }
+        ur.setFoodPrice(order.getFoodPrice());
+        ur.setStatus(order.getStatus());
+        if (order.getStatus() >= OrderStatus.YPJ.getIndex()) {
+            ur.setRate(new OrderShopRatingDto(shopRatingDao.getByOrderId(order.getId())));
+        }
+        websocket.sendBroadMessage(ur, "WosSeller", "newOrder");
     }
 
     @Override
@@ -256,7 +347,7 @@ public class OrderServiceImpl implements OrderService {
         rate.setScore2(or.getScore2());
         rate.setText(or.getText());
         rate.setRateType(or.getType());
-        rate.setDiliveryTime(order.getDiliveryTime());
+        rate.setDiliveryTime(order.getDeliveryTime());
         rate.setUserId(or.getUserId());
         rate.setOrderId(order.getId());
         shopRatingDao.add(rate);
@@ -272,6 +363,35 @@ public class OrderServiceImpl implements OrderService {
         orderHistoryDao.add(oh);
 
         return true;
+    }
+
+    @Override
+    public void doFinishOrder(int orderId) throws ServiceException {
+        Order order = orderDao.getByID(orderId);
+        if (order == null)
+            throw new ServiceException(2002);
+        int deliveryTime = (int) Math.round((System.currentTimeMillis() - order.getCreateTime().getTime()) / 60000.0);
+        updateStatus(order, Constants.ORDER_DELIVEYED);
+        order.setDeliveryTime(deliveryTime);
+        orderDao.update(order);
+        updateStatus(order, Constants.ORDER_FINISHED);
+    }
+
+    @Override
+    public void doArrangeDelivery(int orderId, int distributorId) throws ServiceException {
+        Order order = orderDao.getByID(orderId);
+        if (order == null)
+            throw new ServiceException(2002);
+        Distributor distributor = distributorDao.getById(distributorId);
+        if (distributor == null)
+            throw new ServiceException(2004);
+
+        order.setDistributorId(distributorId);
+        order.setStatus(Constants.ORDER_DELIVEYING);
+        OrderHistory orderHistory = new OrderHistory(order.getId(), distributorId, distributor.getPhone());
+        orderHistoryDao.add(orderHistory);
+        orderDao.update(order);
+
     }
 
 }

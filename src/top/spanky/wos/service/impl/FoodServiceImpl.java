@@ -24,4 +24,14 @@ public class FoodServiceImpl implements FoodService {
         return foodDao.getAll();
     }
 
+    @Override
+    public Boolean addFood(Food food) {
+        return foodDao.add(food);
+    }
+
+    @Override
+    public boolean editFood(Food food) {
+        return foodDao.edit(food);
+    }
+
 }

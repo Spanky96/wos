@@ -36,4 +36,9 @@ public class DiscountDaoImpl extends SqlSessionDaoSupport implements DiscountDao
         return getSqlSession().update(CLASS_NAME + ".update", discount) > 0 ? true : false;
     }
 
+    @Override
+    public Discount getByUserDiscountId(int discountId) {
+        return getSqlSession().selectOne(CLASS_NAME + ".getByUserDiscountId", discountId);
+    }
+
 }
