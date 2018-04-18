@@ -133,6 +133,7 @@
     <bean id="userDiscountService" class="top.spanky.wos.service.impl.UserDiscountServiceImpl" scope="singleton">
       <property name="userDiscountDao" ref="userDiscountDao" />
       <property name="discountDao" ref="discountDao" />
+      <property name="userDao" ref="userDao" />
     </bean>
     
     <bean id="ReportService" class="top.spanky.wos.service.impl.ReportServiceImpl" scope="singleton">

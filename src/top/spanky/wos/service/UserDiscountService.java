@@ -16,4 +16,6 @@ public interface UserDiscountService {
 
     public boolean deleteById(int id);
 
+    public String doSendDiscount(String openId);
+
 }

@@ -37,4 +37,11 @@
             UPDATE user_discount SET used = 1 WHERE id = #{id};
         ]]>
     </update>
+    
+    <select id="getTodayDiscountByUserId" parameterType="int" resultType="Integer">
+        <![CDATA[
+            SELECT count(*) FROM user_discount WHERE user_id=#{id} AND date_format(now(),'%Y-%m-%d')= date_format(time_start,'%Y-%m-%d');
+        ]]>
+    </select>
+    
 </mapper>

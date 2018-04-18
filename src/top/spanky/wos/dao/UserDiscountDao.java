@@ -14,4 +14,6 @@ public interface UserDiscountDao {
 
     public boolean deleteById(int id);
 
+    public int getTodayDiscountByUserId(Integer id);
+
 }

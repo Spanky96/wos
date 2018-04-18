@@ -45,6 +45,12 @@ public class Constants {
     public static final int DISCOUNT_DELIVERY_FREE = 4;
     public static final int DISCOUNT_RANDOM = 5;
 
+    // Messages
+    public static final String DISCOUNT_MESSAGE_FAIL = "对不起，您还不是会员，不能享受优惠活动。";
+    public static final String DISCOUNT_MESSAGE_FAIL2 = "不要太贪心啦，每天限量一次哦～";
+    public static final String DISCOUNT_MESSAGE_SUCCESS = "您已成功领取每日红包😁, 您可以去个人中心查看，要及时使用哦！";
+
     // admins
     public static final String[] ADMIN_OPENIDS = { "oh56I1vlzWwbJ4SeS4STPyqbPAns", "testopenId" };
+
 }

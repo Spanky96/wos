@@ -4,8 +4,9 @@ import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import top.spanky.wos.exception.ServiceException;
+import top.spanky.wos.service.UserDiscountService;
 
 public class SpringUtil implements ApplicationContextAware {
 
@@ -26,7 +27,12 @@ public class SpringUtil implements ApplicationContextAware {
     }
 
     @Test
-    public void TestMath() throws ServiceException {
-        System.out.println((260820 - 23380 - 234229) + 8265);
+    public void TestMath() throws Exception {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserDiscountService userDiscountService =  (UserDiscountService)ac.getBean("userDiscountService");
+
+        System.out.println(userDiscountService.doSendDiscount("oh56I1rAcdxTDWD-lo8Apoqgzj3g"));
+
     }
+
 }

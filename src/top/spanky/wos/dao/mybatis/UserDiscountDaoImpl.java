@@ -31,4 +31,9 @@ public class UserDiscountDaoImpl extends SqlSessionDaoSupport implements UserDis
         return getSqlSession().update(CLASS_NAME + ".deleteById", id) > 0 ? true : false;
     }
 
+    @Override
+    public int getTodayDiscountByUserId(Integer id) {
+        return getSqlSession().selectOne(CLASS_NAME + ".getTodayDiscountByUserId", id);
+    }
+
 }

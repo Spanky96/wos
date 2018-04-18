@@ -23,6 +23,7 @@ import net.sf.json.JSONObject;
 import top.spanky.wos.Constants;
 import top.spanky.wos.json.MyJsonService;
 import top.spanky.wos.model.User;
+import top.spanky.wos.service.UserDiscountService;
 import top.spanky.wos.service.UserService;
 import top.spanky.wos.util.PropertyUtil;
 import top.spanky.wos.util.SpringUtil;
@@ -43,6 +44,8 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserDiscountService userDiscountService;
 
     @RequestMapping(value = "/dev", method = RequestMethod.GET)
     @ResponseBody
@@ -85,8 +88,7 @@ public class UserController extends BaseController {
         tm.setToUserName(requestMap.get("FromUserName"));
         tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
         if (content.trim().endsWith("红包")) {
-            tm.setContent("一个红包已悄悄送到。可以去个人中心查看。");
-            tm.setContent("今天您已经领取过红包啦，别太贪心噢～");
+            tm.setContent(userDiscountService.doSendDiscount(requestMap.get("FromUserName")));
         } else {
             tm.setContent(TextMessage.defaultMessage[(int) (Math.random() * 5)]);
         }
@@ -115,7 +117,7 @@ public class UserController extends BaseController {
             tm.setToUserName(requestMap.get("FromUserName"));
             tm.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
             if ("RED_PACKAGE".equals(eventKey)) {
-                tm.setContent("一个红包已悄悄送到。可以去个人中心查看。");
+                tm.setContent(userDiscountService.doSendDiscount(requestMap.get("FromUserName")));
             }
             if ("ABOUT".equals(eventKey)) {
                 MyJsonService js = (MyJsonService) SpringUtil.getBean("myJsonService");
