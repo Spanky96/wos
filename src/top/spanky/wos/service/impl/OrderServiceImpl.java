@@ -389,6 +389,7 @@ public class OrderServiceImpl implements OrderService {
         order.setDistributorId(distributorId);
         order.setStatus(Constants.ORDER_DELIVEYING);
         OrderHistory orderHistory = new OrderHistory(order.getId(), distributorId, distributor.getPhone());
+        orderHistory.setType(Constants.ORDER_DELIVEYING);
         orderHistoryDao.add(orderHistory);
         orderDao.update(order);
 
